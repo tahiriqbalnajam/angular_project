@@ -261,7 +261,7 @@ $scope.item_detail = function(id,cid){
 			//console.log(cid);
 			console.log(index);
 			if(index == cid-1){
-				transaction.purchase_price = data.data.price;
+				transaction.purchase_price = (data.data.price).toFixed(2);
 			}
 		 // runningTotal += transaction.sale_price*transaction.qty;
 		});
@@ -300,10 +300,11 @@ $scope.getpurchaser_total = function(index) {
       runningTotal += parseFloat(transaction.purchaser_total);
     });
 	//$scope.form.total = runningTotal
-	if(isNaN(runningTotal))
-		return 0;
-	else
-    	return (runningTotal).toFixed(2);
+	if(isNaN(runningTotal)){
+		return 0;}
+	else{
+		return runningTotal.toFixed(2);
+		}
 };
 $scope.getsaler_total = function(index) {
    // console.log(index);
@@ -313,12 +314,14 @@ $scope.getsaler_total = function(index) {
       runningTotal += parseFloat(transaction.saler_total);
     });
 	//$scope.form.total = runningTotal
-	if(isNaN(runningTotal))
-		return 0;
-	else
-    	return runningTotal.toFixed(2);
+	if(isNaN(runningTotal)){
+		return 0;}
+	else{
+		return runningTotal.toFixed(2);}
 };
-
+$scope.num_formate = function(value) {
+	return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
 //////////////end total
 
 

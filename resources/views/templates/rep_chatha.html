@@ -36,8 +36,8 @@
                                 	<td>{{ x.name }}</td>
                                     <!--<td>{{ x.jama_amount.toFixed(2) }}</td>
                                     <td>{{ x.naam_amount.toFixed(2) }}</td> -->                                   
-                                    <td><span ng-if="x.balance>=0" >{{ x.balance.toFixed(2) }}</span></td>
-                                    <td><span ng-if="x.balance<0" >{{ x.balance.toFixed(2) }}</span></td>
+                                    <td><span ng-if="x.balance>=0" >{{ num_formate(x.balance.toFixed(2)) }}</span></td>
+                                    <td><span ng-if="x.balance<0" >{{ num_formate(x.balance.toFixed(2)) }}</span></td>
                                     <!--<td>{{ x.balance.toFixed(2) }}</td>-->
                                 </tr>
                             </tbody>
@@ -47,8 +47,8 @@
                                     <!--<td>{{ total_naam.toFixed(2) }}</td>
                                     <td>{{ total_jama.toFixed(2) }}</td>-->
                                     <!--<td>{{ total_balance.toFixed(2) }}</td>-->
-                                    <td>{{ jama.toFixed(2) }}</td>
-                                    <td>{{ naam.toFixed(2) }}</td>
+                                    <td>{{ num_formate(jama.toFixed(2)) }}</td>
+                                    <td>{{ num_formate(naam.toFixed(2)) }}</td>
                                   </tr>            
                             </tfoot>
                         </table>                        

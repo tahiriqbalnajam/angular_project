@@ -178,6 +178,13 @@ app.controller('TransectionController', function(dataFactory,$scope,$http,site_u
     {
         return parseFloat(value);
     }
-
+$scope.num_formate = function(value) {
+	//alert($scope.form.amount);
+	//var value = $scope.form.amount;
+	//alert(value);
+	var n = value.replace(",", "");
+	//n = parseDouble(n);
+	 $scope.form.amount = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
   //end Transection 
 });

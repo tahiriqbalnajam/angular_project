@@ -1,9 +1,6 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Account;
@@ -167,7 +164,6 @@ class AccountsController extends Controller
 										->where('running_sale_items.deleted','no')
 										//->where('sales.sale_type','sale')
 										->where('transection.type','direct_sale')
-										->where('transection.deleted','no')
 										->where('transection.payment_type','naam')
 										->join('running_sale_items', 'running_sale_items.sale_id', '=', 'transection.sale_purchase_id')
 										->join('items as i', 'i.id', '=', 'running_sale_items.item_id')
@@ -192,7 +188,6 @@ if($id == 6){
 										//->where('sales.sale_type','sale')
 										->where('transection.type','direct_sale')
 										->where('transection.payment_type','jama')
-										->where('transection.deleted','no')
 										//->join('running_sale_items', function ($join){
 										//	$join->on('running_sale_items.sale_id', '=', 'transection.sale_purchase_id');
 										//	$join->on('running_sale_items.seller_id', '=', 'transection.account_id');
@@ -218,7 +213,6 @@ if($id == 6){
 										->where('running_sale_items.deleted','no')
 										//->where('sales.sale_type','sale')
 										->where('transection.type','direct_sale')
-										->where('transection.deleted','no')
 										->where('transection.payment_type','jama')
 										->join('running_sale_items', function ($join){
 											$join->on('running_sale_items.sale_id', '=', 'transection.sale_purchase_id');

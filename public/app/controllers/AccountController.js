@@ -384,7 +384,9 @@ function product_detaill(id){
 
 
 
-
+$scope.num_formate = function(value) {
+	return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
 
 ///////// services detail /////////////
 ///////////////  account detail mall rokkar /////////////

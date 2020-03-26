@@ -175,7 +175,8 @@ app.controller('MallrokkarController', function(dataFactory,$scope,$http,site_ur
 		$scope.form.p_grand_total = (parseFloat($scope.total+($scope.total*1.6/100))).toFixed(2);
 		$scope.form.chong = ($scope.total*$scope.form.petty_cash11/100).toFixed(2);
 		$scope.form.arhat = ($scope.total*1.6/100).toFixed(2);
-		$scope.form.ttl = (parseFloat($scope.form.total) + parseFloat($scope.form.arhat));
+		var ttll = (parseFloat($scope.form.total) + parseFloat($scope.form.arhat));
+		$scope.form.ttl = ttll.toFixed(2);
 	}
 	
 	//transection....

@@ -507,7 +507,7 @@
                                     <td>{{ x.rate }}</td>
                                     <td>{{ x.weight }}</td>
                                     <td>{{ x.arhat.toFixed(2) }}</td>
-                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                    <td>{{ num_formate(x.amount.toFixed(2)) }}</td>
                                 </tr>
                             </tbody>
                             <tfoot>  
@@ -529,7 +529,7 @@
                                     <th>آئٹم نام</th>
                                     <th>ریٹ</th>
                                     <th>وزن</th>
-                                    <th>آڑھت</th>
+                                    <th>چونگی</th>
                                     <th>ٹوٹل</th>     
                                 </tr>
                             </thead>
@@ -540,7 +540,7 @@
                                     <td>{{ x.rate }}</td>
                                     <td>{{ x.weight }}</td>
                                     <td>{{ x.chong_amount.toFixed(2) }}</td>
-                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                    <td>{{ num_formate(x.amount.toFixed(2)) }}</td>
                                 </tr>
                             </tbody>
                             <tfoot>  
@@ -571,7 +571,7 @@
                                     <td>{{ x.item_name }}</td>
                                     <td>{{ x.price }}</td>
                                     <td>{{ x.quantity }}</td>
-                                    <td>{{ (x.price*x.quantity).toFixed(2) }}</td>
+                                    <td>{{ num_formate((x.price*x.quantity).toFixed(2)) }}</td>
                                 </tr>
                             </tbody>
                             <tfoot>
@@ -602,7 +602,7 @@
                                     <td>{{ x.item_name }}</td>
                                     <td>{{ x.price }}</td>
                                     <td>{{ x.quantity }}</td>
-                                    <td>{{ (x.price*x.quantity).toFixed(2) }}</td>
+                                    <td>{{ num_formate((x.price*x.quantity).toFixed(2)) }}</td>
                                 </tr>
                             </tbody>
                             <tfoot>
@@ -629,7 +629,7 @@
                                 <tr ng-repeat="x in sales_items_detail">
                                 	<td>{{ x.date }}</td>
                                     <td>{{ x.name }}</td>
-                                    <td>{{ x.amount }}</td>
+                                    <td>{{ num_formate(x.amount) }}</td>
                                     
                                 </tr>
                             </tbody>
@@ -662,7 +662,7 @@
                                 <tr ng-repeat="x in sales_items_detail_jama">
                                 	<td>{{ x.date }}</td>
                                     <td>{{ x.name }}</td>
-                                    <td>{{ (x.amount).toFixed(2) }}</td>
+                                    <td>{{ num_formate((x.amount).toFixed(2)) }}</td>
                                     <!--<td>{{ x.item_name }}</td>
                                     <td>{{ (x.purchase_price).toFixed(2) }}</td>
                                     <td>{{ x.price }}</td>
@@ -698,7 +698,7 @@
                                     <td>{{ x.title }}</td>
                                     <td>{{ x.quantity }}</td>
                                     <td>{{ running_seller_total(x.price , (x.price*x.purchaser_percentage/100)) }}</td>
-                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                    <td>{{ num_formate(x.amount.toFixed(2)) }}</td>
                                     
                                 </tr>
                             </tbody>
@@ -730,7 +730,7 @@
                                     <td>{{ x.title }}</td>
                                     <td>{{ x.quantity }}</td>
                                     <td>{{ running_seller_total(x.price , (x.price*x.saler_percentage/100)) }}</td>
-                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                    <td>{{ num_formate(x.amount.toFixed(2)) }}</td>
                                     
                                 </tr>
                             </tbody>
@@ -750,7 +750,7 @@
                             <thead>
                                 <tr>
                                 	<th>تاریخ</th>
-                                    <th>نام</th>
+                                    <!--<th>نام</th>-->
                                     <th>تفصیل</th>
                                     <th>رقم</th>                                                 
                                 </tr>
@@ -758,14 +758,14 @@
                             <tbody>
                                 <tr ng-repeat="x in transection_detail_jama">
                                 	<td>{{ x.date }}</td>
-                                    <td>{{ x.name }}</td>
+                                    <!--<td>{{ x.name }}</td>-->
                                     <td>{{ x.detail }}</td>
-                                    <td>{{ x.amount }}</td>
+                                    <td>{{ num_formate(x.amount) }}</td>
                                 </tr>
                             </tbody>
                             <tfoot>
                             	<tr>
-                                    <td colspan="3"><strong>ٹوٹل</strong></td>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
                                     <td><strong>{{amount_jama = amountTotal(transection_detail_jama)}}</strong></td>
                                   </tr>              
                             </tfoot>
@@ -779,7 +779,7 @@
                             <thead>
                                 <tr>
                                 	<th>تاریخ</th>
-                                    <th>نام</th>
+                                  <!--  <th>نام</th>-->
                                     <th>تفصیل</th>
                                     <th>رقم</th>                  
                                 </tr>
@@ -787,14 +787,14 @@
                             <tbody>
                                 <tr ng-repeat="x in transection_detail_naam">
                                 	<td>{{ x.date }}</td>
-                                    <td>{{ x.name }}</td>
+                                   <!-- <td>{{ x.name }}</td>-->
                                     <td>{{ x.detail }}</td>
-                                    <td>{{ x.amount }}</td>
+                                    <td>{{ num_formate(x.amount) }}</td>
                                 </tr>
                             </tbody>
                             <tfoot>
                             	<tr>
-                                    <td colspan="3"><strong>ٹوٹل</strong></td>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
                                     <td><strong>{{ amount_naam = amountTotal(transection_detail_naam)}}</strong></td>
                                   </tr>            
                             </tfoot>
@@ -806,53 +806,53 @@
                             <thead>
                             	<tr>
                                     <th>اوپننگ بیلنس</th>
-                                    <th>{{ (account.opening_balance).toFixed(2)}}</th>               
+                                    <th>{{ num_formate((account.opening_balance).toFixed(2))}}</th>               
                                 </tr>
                                 <tr ng-if="total_mall">
-                                    <th>ٹوٹل مال روکڑ</th>
-                                    <th>{{ (total_mall).toFixed(2)}}</th>               
+                                    <th>ٹوٹل مال روکڑنام</th>
+                                    <th>{{ num_formate((total_mall).toFixed(2))}}</th>               
                                 </tr>
                                 <tr ng-if="total_mall_jama">
                                     <th>ٹوٹل مال روکڑ جمع</th>
-                                    <th>{{ (total_mall_jama).toFixed(2)}}</th>               
+                                    <th>{{ num_formate((total_mall_jama).toFixed(2))}}</th>               
                                 </tr>
                                 <tr ng-if="total_receive_jama">
-                                    <th>ٹوٹل وسولی (مال روکڑ)</th>
-                                    <th>{{ (total_receive_jama).toFixed(2)}}</th>               
+                                    <th>ٹوٹل وصولی (مال روکڑ)جمع</th>
+                                    <th>{{ num_formate((total_receive_jama).toFixed(2))}}</th>               
                                 </tr>
                                 <tr ng-if="total_receive_naam">
-                                    <th>ٹوٹل وسولی (مال روکڑ)نام</th>
+                                    <th>ٹوٹل وصولی (مال روکڑ)نام</th>
                                     <th>{{ (total_receive_naam).toFixed(2)}}</th>               
                                 </tr>
                                 <tr ng-if="total_sale_naam">
                                     <th>ٹوٹل سیل (نام)</th>
-                                    <th>{{ (total_sale_naam).toFixed(2)}}</th>   
+                                    <th>{{ num_formate((total_sale_naam).toFixed(2))}}</th>   
                                 </tr>
                                 <tr ng-if="total_sale_jama">
                                     <th>ٹوٹل سیل (جمع)</th>
-                                    <th>{{ (total_sale_jama).toFixed(2)}}</th>   
+                                    <th>{{ num_formate((total_sale_jama).toFixed(2))}}</th>   
                                 </tr>
                                 <tr ng-if="total_dsale_naam">
                                     <th>ٹوٹل ڈائریکٹ سیل (نام)</th>
-                                    <th>{{ (total_dsale_naam).toFixed(2)}}</th>   
+                                    <th>{{ num_formate((total_dsale_naam).toFixed(2))}}</th>   
                                 </tr>
                                 <tr ng-if="total_dsale_jama">
                                     <th>ٹوٹل ڈائریکٹ سیل (جمع)</th>
-                                    <th>{{ (total_dsale_jama).toFixed(2)}}</th>   
+                                    <th>{{ num_formate((total_dsale_jama).toFixed(2))}}</th>   
                                 </tr>
                                 <tr ng-if="total_naqdi_jama">
-                                    <th>ٹوٹل جمع</th>
-                                    <th>{{ (total_naqdi_jama).toFixed(2)}}</th>               
+                                    <th>ٹوٹل  نقدی جمع</th>
+                                    <th>{{ num_formate((total_naqdi_jama).toFixed(2))}}</th>               
                                 </tr>                                
                                 
                                 <tr ng-if="total_naqdi_naam">
-                                    <th>ٹوٹل نام</th>
-                                    <th>{{ (total_naqdi_naam).toFixed(2)}}</th>               
+                                    <th>ٹوٹل نقدی نام</th>
+                                    <th>{{ num_formate((total_naqdi_naam).toFixed(2))}}</th>               
                                 </tr>
                                 
                                 <tr>
                                     <th>بیلنس</th>
-                                    <th>{{ balance }}</th>               
+                                    <th>{{ num_formate(balance) }}</th>               
                                 </tr>
                             </thead>      
                         </table>

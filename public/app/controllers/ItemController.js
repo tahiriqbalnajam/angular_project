@@ -78,5 +78,11 @@ app.controller('ItemController', function(dataFactory,$scope,$http,site_url){
       });
     }
   }
+  $scope.tofixed = function(value){
+		return value.toFixed(2);
+	}
+  
+  
+  
    
 });

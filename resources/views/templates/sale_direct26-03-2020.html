@@ -35,18 +35,12 @@
                                     </select>
                                 </div>
                              </div>-->
-                             <div class="col-md-4">
+                             <div class="col-md-2">
                                 <div class="form-group label-floating">
                                     <label class="control-label urdu-lable">  کھاتہ نام</label>
-                                    <select ng-model="form.former" class="form-control select2" required ng-change="account_detail(form.former)">
+                                    <select ng-model="form.former" class="form-control select2" required>
                                     <option ng-repeat="x in formers" value="{{x.id}}">{{x.name}} ({{x.account_number}})</option>
                                     </select>
-                                </div>
-                             </div>
-                             <div class="col-md-2">
-                             	<div class="form-group label-floating">
-                             		<label class="control-label urdu-lable"> بیلنس</label>
-                             		<strong class="urdu-lable">{{accountdetaildata}} </strong>
                                 </div>
                              </div>
                              <div class="col-md-2">
@@ -102,9 +96,9 @@
                                     </div>
                                 </div>
                                 
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <div class="form-group label-floating">
-                                        <label class="control-label urdu-lable"> قیمت </label>
+                                        <label class="control-label urdu-lable"> قیمت خرید</label>
                                         <input type="text" id="price" ng-model="choice.purchase_price"  class="form-control" required="required">
                                     </div>
                                 </div>
@@ -135,7 +129,7 @@
                                 </div>
                                 
                                 
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <div class="form-group label-floating">
                                         <label class="control-label urdu-lable"> نام ٹوٹل</label>
                                         <div>{{choice.purchaser_total = running_seller_total(qty_price_total(choice.purchase_price,choice.qty),((qty_price_total(choice.purchase_price,choice.qty))*integer(choice.purchaser)/100))}}</div>
@@ -156,7 +150,7 @@
                                 </div>-->
                             </div>                    
                         </div>
-                         Total Saler : {{num_formate(getsaler_total(0))}} &nbsp;&nbsp;&nbsp;&nbsp;Total Purchaser : {{num_formate(getpurchaser_total(0))}}
+                         Total Saler : {{getsaler_total(0)}} &nbsp;&nbsp;&nbsp;&nbsp;Total Purchaser : {{getpurchaser_total(0)}}
                          &nbsp;&nbsp;&nbsp;&nbsp;Total Bachat : {{bachat_total = bachat(getpurchaser_total(0) , getsaler_total(0))}}
                 </div>
                     <button type="submit" ng-disabled="addItem.$invalid" class="btn btn-primary" ng-click="saveDirectSale()">Submit</button>
