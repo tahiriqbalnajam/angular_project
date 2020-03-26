@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title">Account Detail</h4>
+               
+            </div>                   
+            <div class="card-content table-responsive">
+            	<table class="table table-bordered pagin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Item Name</th>                    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in naam_jama_detail">
+                            <td>{{ x.name }}</td>
+                            <td>{{ x.amount }}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    	
+                    </tfoot>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+</div>

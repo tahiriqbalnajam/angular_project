@@ -1,0 +1,177 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title urr">اکائونٹس مینجمیٹ</h4>
+                <p class="category urr">یہاں اکائونٹ مینیج کریں</p>
+                <!--<div class="pull-right" style="padding-top:30px">
+                <div class="box-tools" style="display:inline-table">
+                  <div class="input-group">-->
+                  	<div class="btn-right" style="float:right; margin:-58px 1px">
+                      <!--<input type="text" class="form-control input-sm ng-valid ng-dirty" placeholder="Search" ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">-->
+                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                      <!--<span class="input-group-addon">Search</span>-->
+                  <!--</div>
+                </div>-->
+                <button class="btn btn-success" data-toggle="modal" data-target="#create-user">Create New</button>
+                 
+                 <a class="btn btn-success ur" href="#/accounts"> واپس</a>
+                </div>
+            <!--</div>-->
+            </div>
+            <div class="row" style="margin-top:10px; padding:0 0 0 23px">
+            	<form method="POST" name="filterForm" role="form" ng-submit="filter_form()">                	
+                	<div class="col-md-3">                                                        
+                        <select ng-model="account_type" class="form-control select_account ">
+                        <option value="">Select Account Type</option>
+                        <option ng-repeat="x in accountType" value="{{x.id}}">{{x.title}}</option>
+                        </select>
+                     </div>
+                     <div class="col-md-3">
+                     	<div class="form-group label-floating" style="margin:0">
+                     	<input type="text" class="form-control input-sm ng-valid ng-dirty urdu" placeholder="Search" ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">
+                        </div>
+                     </div>
+                       <button type="submit" class="btn btn-primary ur">تلاش کریں</button> 
+                      
+                </form>
+            </div>            
+            <div class="card-content table-responsive" style="overflow:visible">
+            	<table class="table table-bordered pagin-table table-urdu">
+                    <thead>
+                        <tr>
+                            <th>Sr</th>
+                            <th>نام</th>                            
+                            <th>ایکشن</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="value in accountType | itemsPerPage:perpage" total-items="totalItems">
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ value.title }}</td>                            
+                            <td>
+                            
+                            <!--<button data-toggle="modal" ng-click="accounts_detail(value.id)" data-target="#detail" class=" btn btn-sm btn-success btn-urdu">تفصیل</button>-->
+                            <!---<a href="#/accounts_detail" class="btn btn-success" ng-click="accounts_detail(value.id)">Detail</a>
+                            <!--<button ng-click="accounts_detail(value.id)" class="btn btn-danger">Delete</button>-->
+                            <div ng-if="value.id > 9">
+                            <div class="dropdown" >
+                               <button class="btn btn-sm btn-outline btn-primary dropdown-toggle btn-urdu" type="button" data-toggle="dropdown"> ایکشن
+                               <span class="caret"></span></button>
+                               <ul class="dropdown-menu" style="right:0; text-align:right; left:auto">
+                           
+                                 <li><button data-toggle="modal" ng-click="edit(value.id)" data-target="#edit-data" class="btn  btn-primary btn-urdu dropdown-btn">ترمیم</button></li>
+                                 <button ng-click="remove(value,$index)" class="btn btn-danger btn-urdu dropdown-btn">Delete</button>
+                                 
+                                
+                               </ul>
+                             </div> 
+                             </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    	
+                    </tfoot>
+                </table>
+                <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<div class="row">
+    <div class="col-lg-12 margin-tb">
+        <div class="pull-left">
+            <h1>Item Management</h1>
+        </div>
+        <div class="pull-right" style="padding-top:30px">
+            <div class="box-tools" style="display:inline-table">
+              <div class="input-group">
+                  <input type="text" class="form-control input-sm ng-valid ng-dirty" placeholder="Search" ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                  <span class="input-group-addon">Search</span>
+              </div>
+            </div>
+            <button class="btn btn-success" data-toggle="modal" data-target="#create-user">Create New</button>
+        </div>
+    </div>
+</div>-->
+
+
+<!-- Create Modal -->
+<div class="modal fade" id="create-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="addItem" role="form" ng-submit="saveAdd()">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">نئ بنائیں </h4>
+            </div>
+            <div class="modal-body account">
+                <div class="">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">نام : </strong>
+                            <div class="form-group">
+                                <input ng-model="form.title" type="text" placeholder="Name" name="title" class="form-control urdu" required />
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="addItem.$invalid" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="edit-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="editItem" role="form" ng-submit="saveEdit()">
+                <input ng-model="form.id" type="hidden" placeholder="Name" name="name" class="form-control" />
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">ترمیم نام</h4>
+            </div>
+            <div class="modal-body account">
+                <div class="">
+                    <div class="row">
+                        <div class="col-md-6">
+                        	<strong class="urdu-lable"> نام</strong>
+                            <div class="form-group">
+                               <input ng-model="form.title" type="text" placeholder="Name" name="title" class="form-control urdu" required />
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="editItem.$invalid" class="btn btn-primary create-crud">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+$('.date-picker').datepicker( {
+	changeMonth: true,
+	changeYear: true,
+	showButtonPanel: true,
+	autoclose:true,
+	todayHighlight:true,		
+	format: 'dd/mm/yyyy',        
+    });
+	
+
+</script>

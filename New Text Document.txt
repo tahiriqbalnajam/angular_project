@@ -1,0 +1,95 @@
+https://my.justhost.com/cgi/home
+eyesoft2
+Software@Development123
+
+telenor wifi 62735197
+
+https://mnadeemijaz.000webhostapp.com/
+https://nadeemjee.wordpress.com/
+
+923451075051
+5718
+
+
+
+aftab ptcl 03464774906 
+idlbridge
+FortAbbas123
+google map api key       AIzaSyBPW1ybfVtpbzBTN9TFPfxMthXTmRNIFjY 
+idlbridge mail
+https://idlbridge.com:2096/cpsess7501997819/webmail/justhost/index.html?mailclient=horde
+or
+https://idlbridge.com:2096/
+mail id
+nadeem@idlbridge.com	
+pass     /\/ad33m278
+
+
+UAT(user acceptance test)
+
+fiverr 
+mnadeemijaz@gmail.com
+Sagar278j33
+
+http://www.youtube.com/channel/UCLTZpsUY4usIFq5CUCwXmrA
+Content language:
+	
+rtmp://a.rtmp.youtube.com/live2
+p223-h49d-fbzx-81yk
+
+telenor password
+ptcl!foryou
+
+
+
+[4:58:11 PM] Muhammad Nadeem Ijaz: SQLyogTunnel.php
+[5:05:36 PM] Muhammad Nadeem Ijaz: eyesoft2_tahir
+[5:05:47 PM] Muhammad Nadeem Ijaz: Eyesof
+[5:06:52 PM] Muhammad Nadeem Ijaz: eyesoft2_fortchakkiatta
+
+database elitzhbm_accounts_managment
+user name elitzhbm_uzaonline
+
+User: elitzhbm_uzaonline
+
+Database: elitzhbm_accounts_managment
+
+
+User: elitzhbm_accounts
+
+Database: elitzhbm_accounts_managment
+
+
+
+
+
+user database cleartes_account
+password database account123
+cleartes_pythalogy_laravel
+
+'mall_rokkar','sale','receive_item'
+
+angular project
+ALTER TABLE `accounts` ADD `type` ENUM('person','product') NOT NULL ; 
+ALTER TABLE `sales_items` ADD `category` INT NOT NULL ; 
+ALTER TABLE `sale_items` ADD `category` INT NOT NULL ; 
+ALTER TABLE `sale_items_received` ADD `qty_sold` INT NOT NULL ; 
+
+
+
+new eschool
+
+CREATE TABLE IF NOT EXISTS `penalties` ( `id` int(11) NOT NULL AUTO_INCREMENT, `title` varchar(110) NOT NULL, `club_id` int(11) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 ;
+
+CREATE TABLE IF NOT EXISTS `award` ( `id` int(11) NOT NULL AUTO_INCREMENT, `title` varchar(110) NOT NULL, `club_id` int(11) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 ;
+
+CREATE TABLE IF NOT EXISTS `tasks` ( `id` int(11) NOT NULL AUTO_INCREMENT, `title` varchar(110) NOT NULL, `club_id` int(11) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 
+
+
+CREATE TABLE IF NOT EXISTS `staff_tasks` ( `id` int(11) NOT NULL AUTO_INCREMENT, `staff_id` int(11) NOT NULL,`task_id` int(11) NOT NULL,`club_id` int(11) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 
+
+CREATE TABLE IF NOT EXISTS `staff_awards` ( `id` int(11) NOT NULL AUTO_INCREMENT, `staff_id` int(11) NOT NULL,`award_id` int(11) NOT NULL,`club_id` int(11) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 
+
+CREATE TABLE IF NOT EXISTS `staff_penalties` ( `id` int(11) NOT NULL AUTO_INCREMENT, `staff_id` int(11) NOT NULL,`penalties_id` int(11) NOT NULL,`club_id` int(11) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 
+
+ALTER TABLE `staff_tasks` ADD `date` DATE NOT NULL , ADD `status` ENUM('created','progress','canceled','completed') NOT NULL , ADD `rating` INT NOT NULL ; 

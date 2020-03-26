@@ -1,0 +1,94 @@
+<style>
+.remove {
+    background: #c76868 none repeat scroll 0 0;
+    border: 0 none;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 100%;
+    padding: 4px 9px;
+    vertical-align: top;
+}
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title">Sale add</h4>
+                <p class="category">Enter Sales Detail Here</p>                
+                <div class="btn-right" style="float:right; margin:-58px 1px">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <a class="btn btn-success" href="#/sales"> Cancel</a>
+                </div>
+            </div>
+            <div class="card-content">
+            <form method="POST" name="addItem" role="form" ng-submit="">            
+                <div class="row">
+                    	<div class="row">
+                        	<div class="col-md-10">
+                                <div class="form-group label-floating">
+                                    <label class="control-label"> Saller Account</label>
+                                    <select ng-model="form.former" class="form-control select2" required>
+                                    <option ng-repeat="x in formers" value="{{x.id}}">{{x.name}}</option>
+                                    </select>
+                                </div>
+                             </div>
+                         </div>
+                          <button class="btn btn-primary" ng-click="AddContactTypeControl()">Add Fields</button>
+                         <div id="contactTypeDiv"></div>
+                         
+                         <!--<div  data-ng-repeat="choice in choices">
+                            <div class="row">                        	
+                                <div class="col-md-3">
+                                    <div class="form-group label-floating">
+                                    <label class="control-label"> Select Item {{choice.id}}</label>
+                                    <select ng-model="form.all_item['{{choice.id}}']" name="form.item{{choice.id}}"  class="form-control select2" required>
+                                    <option ng-repeat="s in all_items" value="{{s.id}}">{{s.name}}</option>
+                                    </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label"> Price</label>
+                                        <input type="text" id="price" ng-model="form.price"  class="form-control" required="required">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label"> Quantity</label>
+                                        <input type="text" id="quantity" ng-model="form.quantity"  class="form-control" required="required">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label"> total</label>
+                                        <div>{{form.price*form.quantity}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                	<div class="form-group label-floating">
+		                                <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button>
+                                    </div>
+                                </div>
+                            </div>                    
+                        </div>-->
+                </div>{{choices}}
+                    <button type="submit" ng-disabled="addItem.$invalid" class="btn btn-primary" ng-click="saveAdd()">Submit</button>
+            </form>
+            
+				   <button class="btn btn-info" ng-click="addNewChoice()">Add fields</button>
+            </div>                        
+        </div>
+    </div>
+</div>
+
+<script>
+	$(function () {			
+		$(".select2").select2();
+	});
+	
+
+	
+	</script>

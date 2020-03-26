@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title urr">نقدی روکٹ {{myWelcome}}</h4>
+                <p class="category urr">یہاں نقدی روکڑ کی تفصیل درج کریں</p>                
+                <div class="btn-right" style="float:right; margin:-58px 1px">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <a class="btn btn-success ur" href="#/transection"> کینسل</a>
+                </div>
+            </div>
+            <div class="card-content">
+            <form method="POST" name="addItem" role="form" ng-submit="saveTransection()">            
+                <div class="row">                    
+                        	<div class="col-md-6 transxaction">
+                                <div class="form-group label-floating">
+                                     <strong class="urdu-lable"> کھاتہ جمع</strong>
+                                    <select ng-model="form.account_jama" class="form-control select2" required>
+                                    <option ng-repeat="x in all_accounts" value="{{x.id}}">{{x.name}} ({{x.account_number}})</option>
+                                    </select>
+                                </div>
+                             </div>
+                             <div class="col-md-6 transxaction">
+                                <div class="form-group label-floating">
+                                     <strong class="urdu-lable"> کھاتہ نام</strong>
+                                    <select ng-model="form.account_naam" class="form-control select2" required>
+                                    <option ng-repeat="x in all_accounts" value="{{x.id}}">{{x.name}} ({{x.account_number}})</option>
+                                    </select>
+                                </div>
+                             </div>
+                    	<div class="col-md-6">
+                        	<div class="form-group label-floating">
+                                <strong class="urdu-lable">رقم</strong>
+                                <input type="text" ng-model="form.amount" class="form-control" required="required">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                        	<div class="form-group label-floating">
+                                <strong class="urdu-lable">تفصیل</strong>
+                                <input type="text" ng-model="form.detail" class="form-control">
+                            </div>
+                        </div>
+                        <!--<div class="col-md-6">
+                        	<div class="form-group label-floating">
+                                <strong class="urdu-lable">قسم </strong>
+                                <select ng-model="form.payment_type" class="form-control select2 trans_selest" required>
+                                <option ng-repeat="x in opts" value="{{x.value}}">{{x.text}}</option>
+                                </select>
+                            </div>
+                        </div> -->                   
+                </div>                    
+                    <button type="submit" ng-disabled="addItem.$invalid" class="btn btn-primary" >Submit</button>
+            </form>
+            </div>                        
+        </div>
+    </div>
+</div>
+
+<script>
+	$(function () {			
+		$(".select2").select2();
+	});
+	</script>

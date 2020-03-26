@@ -1,0 +1,100 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title urr">مال روکڑ خرید</h4>
+                <p class="category urr">یہاں مال روکڑ خرید کی تفصیل درج کریں</p>                
+                <div class="btn-right" style="float:right; margin:-58px 1px">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <a class="btn btn-success ur" href="#/mallrokkar"> کینسل</a>
+                </div>
+            </div>
+            <div class="card-content">
+            <form method="POST" name="addItem" role="form" ng-submit="">            
+                <div class="row">
+                    <div class="col-md-6" style="border-right: 3px solid #952cae;">
+                    <h3 class="urr">فروخت کنندہ سائیڈ</h3>
+                    	<div class="row">
+                        	<div class="col-md-10">
+                                <div class="form-group label-floating">
+                                    <label class="control-label urdu-lable"> فروخت کنندہ کھاتہ</label>
+                                    <select ng-model="form.saler_account" class="form-control select2" required>
+                                    <option ng-repeat="x in all_account" value="{{x.id}}">{{x.name}}</option>
+                                    </select>
+                                </div>
+                             </div>
+                         </div>
+                    <div class="row">
+                    	<div class="col-md-3">
+                            <div class="form-group label-floating">
+							<label class="control-label urdu-lable">  جنس</label>
+                            <select ng-model="form.item_id" class="form-control select2" required>
+                            <option ng-repeat="x in items" value="{{x.id}}">{{x.title}}</option>
+                            </select>
+                        </div>
+                         </div>
+                    	<div class="col-md-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> ریٹ</label>
+                                <input type="text" ng-model="form.rate" ng-change="calculate()" class="form-control" required="required">
+                            </div>
+                         </div>
+                         <div class="col-md-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> وزن</label>
+                                <input type="text" ng-model="form.weight" class="form-control" ng-change="calculate()" required="required">
+                            </div>
+                         </div>
+                         <div class="col-md-3">                  
+                        <div class="form-group label-floating">
+                            <strong class="urdu-lable">ٹوٹل : {{form.total}}</strong>
+                            <input type="hidden" ng-model="form.total" class="form-control"  readonly="readonly">
+                        </div>
+                     </div>
+                    </div>                     
+                        <div class="form-group label-floating">
+                            <strong class="urdu-lable">پرچہ نمبر</strong>
+                            <input type="text" ng-model="form.percha_no" class="form-control" required="required">
+                        </div> 
+                    
+                    
+                    <div class="row">                  
+                        <div class="form-group label-floating">
+                            <h3 class="urr"> ٹوٹل بل : {{form.p_grand_total}}</h3>                            
+                        </div>                        
+                     </div>
+                    </div>
+                    <div class="col-md-5 pull-right">
+                    <h3 class="urr">خریدار سائیڈ</h3>
+                    	<div class="row">
+                        	<div class="col-md-10">
+                                <div class="form-group label-floating">
+                                    <label class="control-label urdu-lable"> کریدار کھاتہ</label>
+                                    <select ng-model="form.purchaser_account" class="form-control select2" required>
+                                    <option ng-repeat="x in all_account" value="{{x.id}}">{{x.name}}</option>
+                                    </select>
+                                </div>
+                             </div>                             
+                         </div>
+                        <div class="form-group label-floating">
+                            <strong class="urdu-lable"> آڑھت : {{form.arhat}}</strong>                         
+                        </div>
+                        <div class="form-group label-floating">
+                            <!--<label class="control-label">--> <h3 class="urr"> ٹوٹل بل: {{form.p_grand_total}}</h3>
+                            <input type="hidden" ng-model="form.p_grand_total" class="form-control"  readonly="readonly">                             
+                            <input type="hidden" ng-model="form.arhat" readonly="readonly">                            
+                        </div>                        
+                    </div>
+                </div>
+                    <button type="button" ng-disabled="addItem.$invalid" class="btn btn-primary" ng-click="saveAddPurchase()">Submit</button>
+            </form>
+            </div>                        
+        </div>
+    </div>
+</div>
+
+<script>
+	$(function () {			
+		$(".select2").select2();
+	});
+	</script>

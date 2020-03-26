@@ -1,0 +1,208 @@
+<style type="text/css">
+.red {
+    background: red; 
+}
+
+.black {
+    background:tranparent;
+}
+</style>
+<div class="row" >
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title urr">مال روکڑ مینیجمنٹ</h4>
+                <p class="category urr">یہاں سے مال روکڑ مینج کریں</p>
+                <!--<div class="pull-right" style="padding-top:30px">
+                <div class="box-tools" style="display:inline-table">
+                  <div class="input-group">-->
+                  	<div class="btn-right" style="float:right; margin:-58px 1px">
+                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                      <!--<span class="input-group-addon">Search</span>-->
+                  <!--</div>
+                </div>-->                
+                <button class="btn btn-success ur" data-toggle="modal" data-target="#create-user">مال آمد</button>
+                <!--<a class="btn btn-warning ur" href="#/mallrokkar_purchase"> مال روکڑ خرید</a>-->
+                </div>
+            <!--</div>-->
+            </div>
+            <div class="row" style="margin-top:10px; padding:0 0 0 23px">
+            	<form method="POST" name="filterForm" role="form" ng-submit="filter_form()">
+            	<div class="col-md-2">
+                	<div style=" margin-top: 15px;">
+                		<input class="form-control date-picker reset" id="date" ng-model="date" value="" placeholder="select Date">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                	<div class="input-group">
+                		<input type="submit" name="submit" value="Filter" class="btn btn-success">
+                    </div>
+                </div>
+                </form>
+            </div> 
+            <div class="row">
+            	<div class="col-md-12">
+                <h2 align="center" class="urr">جمع</h2>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نمبر شمار</th>
+                                    <th>کھاتہ بنام </th>
+                                    <th>جنس </th>
+                                    <th>وزن</th>
+                                    <th>تاریخ</th>
+                                    <th>ایکشن</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="value in mall_amad_detail | itemsPerPage:5000" total-items="totalItems" >
+                                    <td>{{ $index + 1 }}</td>
+                            <td>{{ value.name }}</td>
+                            <td>{{ value.title }}</td>
+                            <td>{{ value.weight }}</td>
+                            <td>{{ value.date }}</td>
+                            <td>
+                            
+                            <!--<button data-toggle="modal" ng-click="accounts_detail(value.id)" data-target="#detail" class=" btn btn-sm btn-success btn-urdu">تفصیل</button>-->
+                            <!---<a href="#/accounts_detail" class="btn btn-success" ng-click="accounts_detail(value.id)">Detail</a>
+                            <!--<button ng-click="accounts_detail(value.id)" class="btn btn-danger">Delete</button>-->
+                            <button ng-click="remove(value,$index)" class="btn-danger">Delete</button>
+                            <button data-toggle="modal" ng-click="mall_amad_print(value.id)" data-target="#print-data" class="btn  btn-primary btn-urdu ">پرنٹ</button>
+                            </td>
+                                
+                            </tbody>
+                            <tfoot>
+                                
+                            </tfoot>
+                        </table>
+                        <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+                    </div>
+                 </div>
+                 
+             </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<div class="row">
+    <div class="col-lg-12 margin-tb">
+        <div class="pull-left">
+            <h1>Item Management</h1>
+        </div>
+        <div class="pull-right" style="padding-top:30px">
+            <div class="box-tools" style="display:inline-table">
+              <div class="input-group">
+                  <input type="text" class="form-control input-sm ng-valid ng-dirty" placeholder="Search" ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                  <span class="input-group-addon">Search</span>
+              </div>
+            </div>
+            <button class="btn btn-success" data-toggle="modal" data-target="#create-user">Create New</button>
+        </div>
+    </div>
+</div>-->
+
+
+<!-- Create Modal -->
+
+<div class="modal fade" id="create-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="addItem" role="form" ng-submit="saveMallamad()">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">نیا کھاتا</h4>
+            </div>
+            <div class="modal-body account">
+            	<div class="row">
+                    <div class="col-md-6">
+                    <label class="control-label urdu-lable"> فروخت کنندہ کھاتہ</label>
+                        <div class="form-group label-floating">
+                            
+                            <select ng-model="form.saler_account" class="form-control select2" required>
+                            <option ng-repeat="x in all_account" value="{{x.id}}">{{x.name}}</option>
+                            </select>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                     <label class="control-label urdu-lable">  جنس</label>
+                        <div class="form-group label-floating">
+                        
+                        <select ng-model="form.item_id" class="form-control select2" required>
+                        <option ng-repeat="x in items" value="{{x.id}}">{{x.title}}</option>
+                        </select>
+	                    </div>
+                     </div>
+                     <div class="col-md-6">
+                     <label class="control-label urdu-lable"> وزن</label>
+                        <div class="form-group label-floating">
+                            
+                            <input type="text" ng-model="form.weight" class="form-control" required="required">
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                      <label class="control-label urdu-lable"> تاریخ</label>
+                        <div class="form-group label-floating">
+                           
+                            <input class="form-control date-picker reset" id="date" ng-model="form.date" value="" placeholder="select Date" required="required">
+                        </div>
+                     </div>
+                </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="addItem.$invalid" class="btn btn-primary">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="print-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content text_right" id="print_">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">مال آمد</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="card-content table-responsive">
+                    <table class="table table-urdu">
+                        <tr>
+                            <td>{{config.name}}</td><td>آڑھت</td>
+                        </tr>
+                        <tr>
+                            <td>{{mall_amad.date}}</td><td>تاریخ</td>
+                        </tr>
+                        <tr>
+                            <td>{{mall_amad.name}}</td><td>نام</td>
+                        </tr>
+                        <tr>
+                            <td>{{mall_amad.title}}</td><td>جنس</td>
+                        </tr>
+                        <tr>
+                            <td>{{mall_amad.weight}}</td><td>وزن</td>
+                        </tr>
+                    </table>
+                </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" ng-click="print_div()">Print</button> 
+                    
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+$('.date-picker').datepicker( {
+	changeMonth: true,
+	changeYear: true,
+	showButtonPanel: true,
+	autoclose:true,
+	todayHighlight:true,		
+	format: 'dd/mm/yyyy',        
+    });
+</script>

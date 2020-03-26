@@ -1,0 +1,184 @@
+@charset "utf-8";
+/* CSS Document */
+
+@font-face {
+    font-family: noori;
+    src: url(./noori/JameelNooriNastaleeq.woff);
+}
+@font-face {
+    font-family: noori;
+    src: url(./noori/JameelNooriNastaleeq.eot);
+}
+@font-face {
+    font-family: noori;
+    src: url(./noori/JameelNooriNastaleeq.ttf);
+}
+@font-face {
+    font-family: noori;
+    src: url(./noori/Jameel.ttf);
+}
+.panel-heading.login_header {
+   background-color: #9c27b0;
+  box-shadow: 0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0 rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2);
+  color:#fff;
+   border:#9c27b0;	
+}
+.dropdown-btn{
+	width: 100%;
+	background: transparent !important;
+	color: #000 !important;
+	text-align: right !important;
+}
+.label-balance{
+	padding:0;
+	display:inline-block;
+	font-size:22px;}
+
+.dropdown-btn:hover{
+	background-color: #9c27b0 !important;
+	color: #FFFFFF !important;
+}
+.big-font li a p{
+	font-family:noori !important;
+	font-size:20px !important;}
+.table-urdu tr th{
+	font-family:noori !important;
+	font-size:25px !important;
+	border:1px solid 
+}
+
+.table-urdu tr td{
+	font-family:noori !important;
+	font-size:20px !important;
+	border:1px solid 
+}
+ّ
+.col-md-6.login_page {
+  margin-top: 37px;
+}
+.ur{
+	font-family:noori !important;
+	font-size: 25px;
+	padding: 0px 7px 0px 7px;
+}
+.urdu{
+	font-family:noori !important;
+	font-size:20px;	
+}
+.urdu-opt option{
+	font-family:noori !important;
+	font-size:20px;	
+}
+.btn-urdu{
+	font-family: !noori important;
+	font-size: 20px !important;
+	padding: 0 7px 0 11px !important;
+	margin: 0;
+}
+.urr{
+	font-family:noori !important;
+}
+.urdu-lable{
+	font-family: noori !important;
+	font-size: 20px !important;
+	margin: 0 !important;
+}
+.text_right h3{
+	text-align:right !important;
+}
+.btn_login{
+background-color: #9c27b0;
+  box-shadow: 0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0 rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2);
+  color:#fff;
+  border:#9c27b0;	
+	
+}
+.pannel_login{
+ border-color:#9c27b0;	
+	
+	
+	
+}
+.name_shop h1 {
+  text-align: center;
+}
+.col-sm-12.name_shop {
+  margin-top: 144px;
+}
+.btn_login:hover {
+  background: #9c27b0 none repeat scroll 0 0;
+box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
+
+}
+.searc_saleitem {
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 27%;
+}
+.modal-header .close {
+  background: #9c27b0 none repeat scroll 0 0;
+  border: 1px solid #9c27b0;
+  border-radius: 28px;
+  color: #fff !important;
+  font-size: 32px;
+  margin-top: -13px;
+  padding: 6px;
+}
+.modal-content .modal-header {
+  background: #9c27b0 none repeat scroll 0 0;
+  border-bottom: medium none;
+  border-radius: 3px;
+  box-shadow: 0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0 rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2);
+  color: #fff;
+padding: 24px 24px 19px;
+}
+.select_account {
+  background-image: none;
+  border: 1px solid #d2d2d2 !important;
+  height: 37px;
+  margin-top: 3px;
+  padding: 5px;
+}
+.account .form-group {
+  margin: 0px !important;
+}
+.btn_login:active {
+  background-color: #9c27b0 !important;
+  border: medium none #9c27b0 !important;
+  box-shadow: 0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0 rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2);
+  color: #fff;
+}
+.account_type {
+  border: 1px solid #d2d2d2;
+  border-radius: 6px;
+  margin-top: 7px;
+  width: 100%;
+  padding:10px
+  border-color: #888 transparent transparent;
+  border-style: solid;
+}
+.account_type > option {
+	padding:7px;
+ 
+}
+@media print{
+	.no_print{
+		display:none !important;
+	}
+}
+
+/*.account_type{
+  border-color: #888 transparent transparent;
+  border-style: solid;
+  border-width: 5px 4px 0;
+  height: 0;
+  left: 50%;
+  margin-left: -4px;
+  margin-top: -2px;
+  position: absolute;
+  top: 50%;
+  width: 0;
+}*/

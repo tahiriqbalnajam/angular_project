@@ -1,0 +1,329 @@
+<style type="text/css">
+.red {
+    background: red; 
+}
+
+.black {
+    background:tranparent;
+}
+</style>
+<div class="row" >
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title urr">نقدی روکڑ</h4>
+                <p class="category urr">یہاں نقدی روکٹ مینیج کریں</p>
+                <!--<div class="pull-right" style="padding-top:30px">
+                <div class="box-tools" style="display:inline-table">
+                  <div class="input-group">-->
+                  	<div class="btn-right" style="float:right; margin:-58px 1px">
+                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                      <!--<span class="input-group-addon">Search</span>-->
+                  <!--</div>
+                </div>-->
+                <a class="btn btn-success ur" href="#/add_transection"> نئی انٹری</a>
+                </div>
+            <!--</div>-->
+            </div>
+            <div class="row" style="margin-top:10px; padding:0 0 0 23px">
+            	<form method="POST" name="filterForm" role="form" ng-submit="filter_form()">
+            	<div class="col-md-2">
+                	<div style=" margin-top: 15px;">
+                		<input class="form-control date-picker reset" id="date" ng-model="date" value="" placeholder="select Date">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                	<div style=" margin-top: 15px;">                		
+                        <select ng-model="selectAccount" class="form-control select2 urdu" >
+                        	<option value="">سیلیکٹ کھاتہ</option>
+                        	<option ng-repeat="x in all_accounts" value="{{x.id}}">{{x.name}} ({{x.account_number}})</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                	<div class="input-group">
+                		<input type="submit" name="submit" value="Filter" class="btn btn-success">
+                    </div>
+                </div>
+                </form>
+            </div> 
+            <div class="row">
+            <h4 style="padding-left: 20px;" class="urr"> اماءونٹ ان ہینڈ: {{ amountInHand }} </h4>  
+            	<div class="col-md-6">
+                <h3 align="center" class="urr"> جمع</h3>
+                         
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>آئ ڈی</th>
+                                    <th>نام</th>
+                                    <th>رقم</th>
+                                    <th>تفصیل</th>
+                                    <th>تاریخ</th>
+                                    <th>ایکشن</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="value in transection_jama | itemsPerPage:5000" total-items="totalItems2" ng-class="{black : value.deleted == 'no', red: value.deleted == 'yes'}">                                   
+                                    <td>{{ value.sale_purchase_id }}</td>
+                                    <td >{{ value.name }}</td>
+                                    <td>{{ (value.amount).toFixed(2) }}</td>
+                                    <td>{{ value.detail }}</td>
+                                    <td>{{ value.date }}</td>
+                                    <td ng-if="value.date == todayDate">
+                                    <span ng-if="value.sale_purchase_id">
+                                    	&nbsp;
+                                    </span>
+                                    <span ng-if="value.sale_purchase_id == 0">
+                                        <span ng-if="value.deleted == 'yes'">
+                                            <button ng-click="correct(value,$index)" class="btn-success">Correct</button>
+                                        </span>
+                                        <span ng-if="value.deleted == 'no'">
+                                            <button ng-click="remove(value,$index)" class="btn-danger">Delete</button>
+                                        </span>
+                                    </span>
+                                    </td>
+                                    <td ng-if="value.date != todayDate">&nbsp;
+                                    </td>
+                                    <!--<td>
+                                    <a class="btn btn-success" href="#/mallrokkar_edit" ng-click="edit(value.id)"> Edit</a>
+                                    <!--<button data-toggle="modal" ng-click="edit(value.id)" data-target="#edit-data" class="btn btn-primary">Edit</button>--
+                                    <button ng-click="remove(value,$index)" class="btn btn-danger">Delete</button>
+                                    </td>-->
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                	<td><strong>ٹوٹل</strong></td>
+                                    <td colspan="4"><strong>{{total_jama = saleTotal(transection_jama)}}</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        
+                    </div>
+                 </div>
+                 <div class="col-md-6">
+                 <h3 align="center" class="urr">نام</h3>
+                 	<div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>آئ ڈی</th>                         
+                                    <th>نام</th>                                    
+                                    <th>رقم</th>
+                                    <th>تفصیل</th>
+                                    <th>تاریخ</th>
+                                    <th>ایکشن</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="value1 in transection_naam | itemsPerPage:5000" total-items="totalItems1" ng-class="{black : value1.deleted == 'no', red: value1.deleted == 'yes'}">                                    
+                                    <td>{{ value1.sale_purchase_id }}</td>
+                                    <td>{{ value1.name }}</td>
+                                    <td>{{ (value1.amount).toFixed(2) }}</td>
+                                    <td>{{ value1.detail }}</td>
+                                    <td>{{ value1.date }}</td>
+                                    <td ng-if="value1.date == todayDate">
+                                    <span ng-if="value1.sale_purchase_id">
+                                    	&nbsp;
+                                    </span>
+                                    <span ng-if="value1.sale_purchase_id == 0">
+                                        <span ng-if="value1.deleted == 'yes'">
+                                            <button ng-click="correct(value1,$index)" class="btn-success">Correct</button>
+                                        </span>
+                                        <span ng-if="value1.deleted == 'no'">
+                                            <button ng-click="remove(value1,$index)" class="btn-danger">Delete</button>
+                                        </span>
+                                    </span>
+                                    </td>
+                                    <td ng-if="value1.date != todayDate">&nbsp;
+                                    
+                                    </td>    
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                	<td><strong>ٹوٹل</strong></td>
+                                    <td colspan="4"><strong>{{total_naam = saleTotal(transection_naam)}}</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                       <strong class="urdu-lable">بیلنس</strong> {{ (parseFloat(total_jama) + parseFloat(amountInHand) - parseFloat(total_naam)).toFixed(2) }}
+                        <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+                    </div>
+                 </div>
+             </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<div class="row">
+    <div class="col-lg-12 margin-tb">
+        <div class="pull-left">
+            <h1>Item Management</h1>
+        </div>
+        <div class="pull-right" style="padding-top:30px">
+            <div class="box-tools" style="display:inline-table">
+              <div class="input-group">
+                  <input type="text" class="form-control input-sm ng-valid ng-dirty" placeholder="Search" ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                  <span class="input-group-addon">Search</span>
+              </div>
+            </div>
+            <button class="btn btn-success" data-toggle="modal" data-target="#create-user">Create New</button>
+        </div>
+    </div>
+</div>-->
+
+
+<!-- Create Modal -->
+<div class="modal fade" id="create-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="addItem" role="form" ng-submit="saveAdd()">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Enter Mall Rokkar Detail</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Name : </strong>
+                            <div class="form-group">
+                                <input ng-model="form.name" type="text" placeholder="Name" name="title" class="form-control" required />
+                            </div>
+                        
+                            <strong>Account Type : </strong>
+                            <div class="form-group">
+                                <select ng-model="form.account_type">
+                                <option ng-repeat="x in accountType" value="{{x.id}}">{{x.title}}</option>
+                                </select>
+                            </div>
+                        
+                            <strong>Address : </strong>
+                            <div class="form-group" >
+                                <textarea ng-model="form.address" class="form-control" required>
+                                </textarea>
+                            </div>
+                        
+                            <strong>CNIC : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.cnic" class="form-control" >
+                            </div>
+                        
+                            <strong>Phone : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.phone" class="form-control" required>
+                            </div>
+                        
+                            <strong>Status : </strong>
+                            <div class="form-group" >
+                                <input type="radio" ng-model="form.status" value="enable"> Enable
+                                <input type="radio" ng-model="form.status" value="disable"> Disable
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                        	<strong>Status : </strong>
+                            <div class="form-group" >
+                                <input type="radio" ng-model="form.status" value="enable"> Enable
+                                <input type="radio" ng-model="form.status" value="disable"> Disable
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="addItem.$invalid" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="edit-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="editItem" role="form" ng-submit="saveEdit()">
+                <input ng-model="form.id" type="hidden" placeholder="Name" name="name" class="form-control" />
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit Account</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                               <input ng-model="form.name" type="text" placeholder="Name" name="title" class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>Account Type : </strong>
+                            <div class="form-group">
+                                <select ng-model="form.account_type">
+                                <option ng-selected="{{x.id == form.account_type}}"
+                                 ng-repeat="x in accountType" value="{{x.id}}">{{x.title}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>Address : </strong>
+                            <div class="form-group" >
+                                <textarea ng-model="form.address" class="form-control" required>
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>CNIC : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.cnic" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>Phone : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.phone" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>Status : </strong>
+                            <div class="form-group" >
+                                <input type="radio" ng-model="form.status" value="enable"> Enable
+                                <input type="radio" ng-model="form.status" value="disable"> Disable
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                               <textarea ng-model="form.address" class="form-control" required>
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="editItem.$invalid" class="btn btn-primary create-crud">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+$('.date-picker').datepicker( {
+	changeMonth: true,
+	changeYear: true,
+	showButtonPanel: true,
+	autoclose:true,
+	todayHighlight:true,		
+	format: 'dd/mm/yyyy',        
+    });
+
+$(function () {			
+		$(".select2").select2();
+	});
+</script>

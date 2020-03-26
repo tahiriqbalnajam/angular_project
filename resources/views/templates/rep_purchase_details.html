@@ -1,0 +1,72 @@
+﻿<div class="row" ng-init="detail()">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title urr"> آئٹم تفصیل  </h4>
+                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                 <a class="btn btn-danger ur" href="#/saleitems">کینسل</a>
+                </div>
+            <div class="row" style="margin-top:10px; padding:0 0 0 23px">
+            	<form method="POST" name="form_report" role="form" ng-submit="detail()">                	                	
+                     <div class="col-md-3">
+                     	<div class="form-group label-floating" style="margin:0">
+                     	<!--<input type="text" class="form-control input-sm ng-valid date_range urdu" placeholder="Search" ng-model="searchText" name="table_search" title="" tooltip="">-->
+                        <input class="form-control date_range reset" id="date" required="required" ng-model="form.date" value="" placeholder="select Date">
+                        </div>
+                     </div>
+                       <button type="submit" class="btn btn-primary ur" >تلاش کریں</button> 
+                      
+                </form>
+            </div>
+        	<div class="card-content table-responsive" style="overflow:visible" id="sales_detail_p">
+            <h2 class="title urr" align="center"> آئٹم تفصیل </h2>
+            <div class="row">
+            	<div class="col-md-12">
+                    <table class="table table-urdu">
+                    	<th>آئٹم نام</th>
+                        <th> تاریخ</th>
+                        <th>قیمت</th>
+                        <th>مقدار</th>
+                        <th>ان لوڈنگ</th>
+                        <th>ٹوٹل</th>                        
+                        <th>ایکشن</th>
+                      <tr ng-repeat="x in detaildata" ng-class="{black : x.type == 'purchase', red: x.type == 'return'}">
+                        <td>{{ x.name }}</td>
+                        <td>{{ x.date }}</td>
+                        <td>{{ (x.price).toFixed(2) }}</td>
+                        <td>{{ x.quantity }}</td>
+                        <td>{{ x.off_loading }}</td>
+                        <td>{{ ((x.quantity*x.price) + (x.quantity*x.off_loading)).toFixed(2) }}</td>
+                        <td ng-if="x.date == todayDate">                            
+                                <span ng-if="x.deleted == 'yes'">
+                                    <button ng-click="correct(x,$index)" class="btn btn-sm btn-success btn-urdu">Correct</button>
+                                </span>
+                                <span ng-if="x.deleted == 'no'">
+                                    <button ng-click="remove_receive_item(x,$index)" class="btn btn-sm btn-danger btn-urdu">Delete</button>
+                                </span>
+                            </td>
+                            <td ng-if="value.date != todayDate">&nbsp;
+                         </td>
+                      </tr>
+                      <tr>
+                      	<td colspan="5"><strong>ٹوٹل</strong></td>
+                        <td><strong>{{(getTotal(detaildata)).toFixed(2)}}</strong></td>
+                      </tr>
+                    </table>
+                    </div>
+               </div>
+                    <button type="button" class="btn btn-default hidden-print" ng-click="sales_detail_print()">Print</button> 
+        </div>
+   </div>
+</div>
+</div>
+<script>
+	$(function() {
+		$('.date_range').daterangepicker({			
+			locale: {
+				format: 'DD/MM/YYYY'
+			}
+		});
+	});
+	
+</script>

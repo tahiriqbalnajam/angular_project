@@ -1,0 +1,145 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title urr">سیلز مینجمیٹ</h4>
+                <p class="category urr">یہاں سے سیلز مینیج کریں</p>                
+                  	<div class="btn-right" style="float:right; margin:-58px 1px">
+                         <a class="btn btn-info ur" href="#/sale_new"> نئی سیل کریں</a>
+                         <a class="btn btn-info ur" href="#/sale_direct"> ڈائریکٹ سیل کریں</a>
+            		</div>
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            </div>
+            <div class="row date_filter" style="margin-top:10px; padding:0 0 0 23px">
+            	<form method="POST" name="filterForm" role="form" ng-submit="filter_form()">
+            	<div class="col-md-2">
+                	<div style=" margin-top: 15px;">
+                		<input class="form-control date-picker reset" id="date" ng-model="date" value="" placeholder="select Date">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                	<div style=" margin-top: 15px;">                		
+                        <select ng-model="selectAccount" class="form-control select2" >
+                        	<option value="">Select Account</option>
+                        	<option ng-repeat="x in formers" value="{{x.id}}">{{x.name}} ({{x.account_number}})</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                	<div class="input-group">
+                		<input type="submit" name="submit" value="Filter" class="btn btn-success">
+                    </div>
+                </div>                
+                </form>
+               
+            </div>            
+            <div class="card-content table-responsive">
+            	<table class="table table-bordered pagin-table table-urdu">
+                    <thead>
+                        <tr>
+                            <th>نمبر شمار</th>
+                            <th>نام</th>
+                            <th>رقم</th>
+                            <th>تاریخ</th>
+                            <th>ایکشن</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="value in data | itemsPerPage:5000" total-items="totalItems">
+                        <!--<tr>-->
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ value.name }}</td>
+                            <td>{{ (value.amount).toFixed(2) }}</td>
+                            <td>{{ value.date }}</td>
+                            <td ng-if="value.date == todayDate">
+                            <span ng-if="value.sale_type == 'sale'">
+                                <span ng-if="value.deleted == 'yes'">
+                                <button ng-click="edit(value.id)" class="btn-success">Correct</button>
+                                </span>
+                                <span ng-if="value.deleted == 'no'">
+                                <button ng-click="remove(value,$index)" class="btn-danger">Delete</button>
+                                <button data-toggle="modal" ng-click="detail(value.id,value.running_sale)" data-target="#edit-data" class="btn-warning">detail</button>
+                                </span>
+                            </span>
+                            <span ng-if="value.sale_type == 'return'">
+                            	Return
+                                <button data-toggle="modal" ng-click="detail(value.id,value.running_sale)" data-target="#edit-data" class="btn-warning">detail</button>
+                            </span>
+                            </td>
+                            <td ng-if="value.date != todayDate">&nbsp;
+                            <button data-toggle="modal" ng-click="detail(value.id,value.running_sale)" data-target="#edit-data" class="btn-warning">detail</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    	<tr>
+                      	<td colspan="2"><strong>ٹوٹل</strong></td>
+                        <td><strong>{{(saleTotal(data)).toFixed(2)}}</strong></td>
+                        <td colspan="2"></td>
+                      </tr>
+                    </tfoot>
+                </table>
+                <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="edit-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">آئٹم تفصیل</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <div class="row">
+                    <table class="table table-urdu">
+                    	<th>آئٹم نام</th>
+                        <th>قیمت</th>
+                        <th>مقدار</th>
+                        <!--<th>نقد/ادھار</th>-->
+                        <th>پرسنٹ</th>
+                        <th>ٹوٹل</th>
+                      <tr ng-repeat="x in detaildata">
+                        <td>{{ x.name }}</td>
+                        <td>{{ x.price }}</td>
+                        <td>{{ x.quantity }}</td>
+                        <!--<td>{{ x.payment_type }}</td>-->
+                        <td>{{ x.intrest }}</td>
+                        <td>{{ (x.quantity*x.price)*(x.intrest/100)+(x.quantity*x.price) }}</td>
+                      </tr>
+                      <tr>
+                      	<td colspan="4"><strong>ٹوٹل</strong></td>
+                        <td><strong>{{getTotal(detaildata)}}</strong></td>
+                      </tr>
+                    </table>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+	$('.date-picker').datepicker( {
+	changeMonth: true,
+	changeYear: true,
+	showButtonPanel: true,
+	autoclose:true,
+	todayHighlight:true,		
+	format: 'dd/mm/yyyy',        
+    });
+
+$(function () {			
+		$(".select2").select2();
+	});
+	</script>

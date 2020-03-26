@@ -1,0 +1,113 @@
+﻿<div class="row" ng-init="mall_detaill()">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title urr">مال روکڑ تفصیل {{account.name}} </h4>
+                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                 <a class="btn btn-danger ur" href="#/accounts">کینسل</a>
+                </div>
+            <div class="row" style="margin-top:10px; padding:0 0 0 23px">
+            	<form method="POST" name="form_report" role="form" ng-submit="mall_detaill()">                	                	
+                     <div class="col-md-3">
+                     	<div class="form-group label-floating" style="margin:0">
+                     	<!--<input type="text" class="form-control input-sm ng-valid date_range urdu" placeholder="Search" ng-model="searchText" name="table_search" title="" tooltip="">-->
+                        <input class="form-control date_range reset" id="date" required="required" ng-model="form.date" value="" placeholder="select Date">
+                        </div>
+                     </div>
+                       <button type="submit" class="btn btn-primary ur" >تلاش کریں</button> 
+                      
+                </form>
+            </div>
+        	<div class="card-content table-responsive" style="overflow:visible" id="mall_detail">
+            <table class="table table-urdu">
+            	<tr>
+                	<td align="right"><h4 class="modal-title urr" >مال روکڑ جمع </h4></td>
+                    <td align="right"><h4 class="modal-title urr" >مال روکڑ نام </h4></td>
+                </tr>
+                <tr>
+                	<td valign="top" style="width:50%; vertical-align:top"> 
+                	
+                    	<div ng-if="mall_roakker_detail_jama">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>آڑھت</th>
+                                    <th>ٹوٹل</th>    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in mall_roakker_detail_jama">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.rate }}</td>
+                                    <td>{{ x.weight }}</td>
+                                    <td>{{ x.chong_amount.toFixed(2) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="5"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_mall_jama).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>
+                        </div>
+                </td><!----end col 6---->
+                <td valign="top" style="width:50%; vertical-align:top">                	
+                	
+                    <div ng-if="mall_roakker_detail">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>آڑھت</th>
+                                    <th>ٹوٹل</th>    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in mall_roakker_detail">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.rate }}</td>
+                                    <td>{{ x.weight }}</td>
+                                    <td>{{ x.arhat.toFixed(2) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="5"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_mall).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>
+                        </div>
+                    
+                </td><!----end col 6---->
+                    	<tr>
+                        	<th align="right">بیلنس</th><th>{{ (balance)}}</th>
+                        </tr>
+            </tr>
+                    <button type="button" class="btn btn-default" ng-click="printmall_detail()">Print</button> 
+        </div>
+   </div>
+</div>
+</div>
+<script>
+	$(function() {
+		$('.date_range').daterangepicker({			
+			locale: {
+				format: 'DD/MM/YYYY'
+			}
+		});
+	});
+	
+</script>

@@ -1,0 +1,2155 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title urr">اکائونٹس مینجمیٹ</h4>
+                <p class="category urr">یہاں اکائونٹ مینیج کریں</p>
+                <!--<div class="pull-right" style="padding-top:30px">
+                <div class="box-tools" style="display:inline-table">
+                  <div class="input-group">-->
+                  	<div class="btn-right" style="float:right; margin:-58px 1px">
+                      <!--<input type="text" class="form-control input-sm ng-valid ng-dirty" placeholder="Search" ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">-->
+                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                      <!--<span class="input-group-addon">Search</span>-->
+                  <!--</div>
+                </div>-->
+                <!--<button class="btn btn-success" data-toggle="modal" data-target="#create-user">Create New</button>-->
+                 <button class="btn btn-success ur" data-toggle="modal" data-target="#create-user">نیا کھاتا</button>
+                 <button class="btn btn-danger ur" data-toggle="modal" data-target="#closing">کھاتہ کلوز</button>
+                 <button class="btn btn-danger ur" data-toggle="modal" data-target="#config">سیٹنگ</button>
+                 <!--<button class="btn btn-danger ur" ng-click="accounts_rokkar()" data-toggle="modal" data-target="#rokkar">چٹھا</button>-->
+                 <a class="btn btn-danger ur" href="#/rep_chatha/0">چٹھا</a>
+                 <a class="btn btn-danger ur" href="#/accountTypes">کھاتہ قسم</a>
+                </div>
+            <!--</div>-->
+            </div>
+            <div class="row" style="margin-top:10px; padding:0 0 0 23px">
+            	<form method="POST" name="filterForm" role="form" ng-submit="filter_form()">                	
+                	<div class="col-md-3">                                                        
+                        <select ng-model="account_type" class="form-control select_account ">
+                        <option value="">Select Account Type</option>
+                        <option ng-repeat="x in accountType" value="{{x.id}}">{{x.title}}</option>
+                        </select>
+                     </div>
+                     <div class="col-md-3">
+                     	<div class="form-group label-floating" style="margin:0">
+                     	<input type="text" class="form-control input-sm ng-valid ng-dirty urdu" placeholder="Search" ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">
+                        </div>
+                     </div>
+                       <button type="submit" class="btn btn-primary ur">تلاش کریں</button> 
+                      
+                </form>
+            </div>            
+            <div class="card-content table-responsive" style="overflow:visible">
+            	<table class="table table-bordered pagin-table table-urdu">
+                    <thead>
+                        <tr>
+                            <th>Sr</th>
+                            <th>کھاتہ نمبر</th>
+                            <th>سابقہ رقم</th>
+                            <th>کھاتہ بنام </th>
+                            <th>فون </th>
+                            <th>پتہ</th>
+                            <th> قسم</th>
+                            <!--<th>Check # From</th>
+                            <th>Check # To</th>-->
+                            <th>ایکشن</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="value in data | itemsPerPage:perpage" total-items="totalItems">
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ value.account_number }}</td>
+                            <td>{{ value.opening_balance }}</td>
+                            <td>{{ value.name }}</td>
+                            <td>{{ value.phone }}</td>
+                            <td>{{ value.address }}</td>
+                            <td>{{ value.title }}</td>
+                            <!--<td>{{ value.check_from }}</td>
+                            <td>{{ value.check_to }}</td>-->
+                            <td>
+                           
+                            <button data-toggle="modal" ng-click="accounts_detail(value.id)" data-target="#detail" class=" btn btn-sm btn-success btn-urdu">تفصیل</button>
+                            
+                            <!---<a href="#/accounts_detail" class="btn btn-success" ng-click="accounts_detail(value.id)">Detail</a>
+                            <!--<button ng-click="accounts_detail(value.id)" class="btn btn-danger">Delete</button>-->
+                            <div ng-if="value.account_type == 7">
+                            <div class="dropdown" >
+                               <button class="btn btn-sm btn-outline btn-primary dropdown-toggle btn-urdu" type="button" data-toggle="dropdown"> ایکشن
+                               <span class="caret"></span></button>
+                               <ul class="dropdown-menu" style="right:0; text-align:right; left:auto">
+                           
+                                 <li><button data-toggle="modal" ng-click="edit(value.id)" data-target="#edit-data" class="btn  btn-primary btn-urdu dropdown-btn">ترمیم</button></li>
+                                 <li>
+                                 <a class="btn btn-sm btn-success btn-urdu dropdown-btn"  href="#/rep_prod_detail/{{value.id}}"> تفصیل</a></li>
+                                 
+                                
+                               </ul>
+                             </div> 
+                             </div>
+                             
+                             <div ng-if="value.account_type == 6">
+                            <div class="dropdown" >
+                               <button class="btn btn-sm btn-outline btn-primary dropdown-toggle btn-urdu" type="button" data-toggle="dropdown"> ایکشن
+                               <span class="caret"></span></button>
+                               <ul class="dropdown-menu" style="right:0; text-align:right; left:auto">
+                           
+                                 <li><button data-toggle="modal" ng-click="edit(value.id)" data-target="#edit-data" class="btn  btn-primary btn-urdu dropdown-btn">ترمیم</button></li>
+                                 <li><a class="btn btn-sm btn-success btn-urdu dropdown-btn"  href="#/ser_mall_detaill/{{value.id}}"> مال روکڑ</a>
+                                 
+                                 <!--<button data-toggle="modal" ng-click="ser_mall_detaill(value.id)" data-target="#ser_mall_detail" class=" btn btn-sm btn-success btn-urdu dropdown-btn">مال روکڑ</button>--></li>
+                                 <li><a class="btn btn-sm btn-success btn-urdu dropdown-btn"  href="#/ser_naqdi_detaill/{{value.id}}"> نقدی روکڑ</a>
+                                 
+                                 <!--<button data-toggle="modal" ng-click="ser_naqdi_detaill(value.id)" data-target="#ser_naqdi_detail" class=" btn btn-sm btn-success btn-urdu dropdown-btn">نقدی روکڑ</button>--></li>
+                                
+                               </ul>
+                             </div> 
+                             </div>
+                             
+                             
+                             <div ng-if="value.account_type != 6 && value.account_type != 7">
+                            <div class="dropdown" >
+                               <button class="btn btn-sm btn-outline btn-primary dropdown-toggle btn-urdu" type="button" data-toggle="dropdown"> ایکشن
+                               <span class="caret"></span></button>
+                               <ul class="dropdown-menu" style="right:0; text-align:right; left:auto">
+                           
+                                 <li><button data-toggle="modal" ng-click="edit(value.id)" data-target="#edit-data" class="btn  btn-primary btn-urdu dropdown-btn">ترمیم</button></li>
+                                 <li><a class="btn btn-sm btn-success btn-urdu dropdown-btn"  href="#/mall_detail/{{value.id}}"> مال روکڑ</a>
+                                 <!--<button data-toggle="modal" ng-click="mall_detaill(value.id)" data-target="#mall_detail" class=" btn btn-sm btn-success btn-urdu dropdown-btn">مال روکڑ</button>--></li>
+                                 <li><a class="btn btn-sm btn-success btn-urdu dropdown-btn"  href="#/naqdi_detail/{{value.id}}"> نقدی روکڑ</a>
+                                 <!--<button data-toggle="modal" ng-click="naqdi_detaill(value.id)" data-target="#naqdi_detail" class=" btn btn-sm btn-success btn-urdu dropdown-btn">نقدی روکڑ</button>--></li>
+                                
+                               </ul>
+                             </div> 
+                             </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    	
+                    </tfoot>
+                </table>
+                <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<div class="row">
+    <div class="col-lg-12 margin-tb">
+        <div class="pull-left">
+            <h1>Item Management</h1>
+        </div>
+        <div class="pull-right" style="padding-top:30px">
+            <div class="box-tools" style="display:inline-table">
+              <div class="input-group">
+                  <input type="text" class="form-control input-sm ng-valid ng-dirty" placeholder="Search" ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                  <span class="input-group-addon">Search</span>
+              </div>
+            </div>
+            <button class="btn btn-success" data-toggle="modal" data-target="#create-user">Create New</button>
+        </div>
+    </div>
+</div>-->
+
+
+<!-- Create Modal -->
+<div class="modal fade" id="create-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="addItem" role="form" ng-submit="saveAdd()">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urdu-lable" id="myModalLabel">نیا کھاتا</h4>
+            </div>
+            <div class="modal-body account">
+                <div class="">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">نام : </strong>
+                            <div class="form-group">
+                                <input ng-model="form.name" type="text" autocomplete="off" placeholder="Name" name="title" class="form-control urdu" required />
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">نیاکھاتہ نمبر : </strong>
+                            <div class="form-group">
+                                <input ng-model="form.account_number" type="text" placeholder="Account Number" name="title" class="form-control urdu" />
+                            </div>
+                        </div>
+                        <!--<div class="col-md-3">
+                            <strong class="urdu-lable">پراناکھاتہ نمبر : </strong>
+                            <div class="form-group">
+                                <input ng-model="form.account_number_old" type="text" placeholder="Account Number" name="title" class="form-control urdu" />
+                            </div>
+                        </div>-->
+                        <!--<div class="col-md-6">
+                            <strong class="urdu-lable">اکائونٹ نمبر : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.cnic" class="form-control urdu" >
+                            </div>
+                        </div>-->
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">فون نمبر : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.phone" class="form-control urdu" required>
+                            </div>
+                        </div>
+                        <!--<div class="col-md-6">
+                            <strong class="urdu-lable">Check # From : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.check_from" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Check # To : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.check_to" class="form-control">
+                            </div>
+                        </div>-->
+                        
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">اکائونٹ قسم : </strong>
+                            <div class="form-group">
+                                <select ng-model="form.account_type" class="account_type urdu">
+                                <option ng-repeat="x in accountType" value="{{x.id}}">{{x.title}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">اوپننگ بیلنس </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.opening_balance" class="form-control urdu" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                                <div class="form-group label-floating">
+                                    <strong class="urdu-lable">قسم</strong>
+                                    <select ng-model="form.naam_jama" class="form-control" required>
+                                    <option ng-repeat="x in opts" value="{{x.value}}">{{x.text}}</option>
+                                    </select>
+                                </div>
+                             </div>
+                        <div class="col-md-12">
+                            <strong class="urdu-lable">پتہ : </strong>
+                            <div class="form-group" >
+                                <textarea ng-model="form.address" class="form-control urdu" required>
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                            	<strong class="urdu-lable">سٹیٹس : </strong>
+                                <input type="radio" ng-model="form.status" value="enable" {{form.status == 'enable' ? 'checked' : ''}} id="enable"> <label for="enable">Enable</label>
+                                <input type="radio" ng-model="form.status" value="disable" id="disable"> <label for="disable">Disable</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                            	<strong class="urdu-lable">قسم : </strong>
+                                <input type="radio" ng-model="form.type" value="person" checked="checked" id="person"> <label for="person">Person</label>
+                                <input type="radio" ng-model="form.type" value="product" id="product"> <label for="product">Product</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" >
+	                            <strong>SMS : </strong>
+                                <input type="radio" ng-model="form.sms" value="yes" checked="checked" id="smsyes"> <label for="smsyes">Yes</label>
+                                <input type="radio" ng-model="form.sms" value="no" id="smsno"> <label for="smsno">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="addItem.$invalid" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="edit-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="editItem" role="form" ng-submit="saveEdit()">
+                <input ng-model="form.id" type="hidden" placeholder="Name" name="name" class="form-control" />
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">ترمیم اکائونٹ</h4>
+            </div>
+            <div class="modal-body account">
+                <div class="">
+                    <div class="row">
+                        <div class="col-md-6">
+                        	<strong class="urdu-lable"> نام</strong>
+                            <div class="form-group">
+                               <input ng-model="form.name" type="text" placeholder="Name" name="title" class="form-control urdu" required />
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <strong class="urdu-lable">نیا کھاتہ نمبر : </strong>
+                            <div class="form-group">
+                                <input ng-model="form.account_number" type="text" placeholder="Account Number" name="title" class="form-control urdu" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <strong class="urdu-lable">پرانا کھاتہ نمبر : </strong>
+                            <div class="form-group">
+                                <input ng-model="form.account_number_old" type="text" placeholder="Account Number" name="title" class="form-control urdu" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">CNIC : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.cnic" class="form-control urdu" >
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">Phone : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.phone" class="form-control urdu" required>
+                            </div>
+                        </div>
+                        <!--<div class="col-md-6">
+                            <strong>Check # From : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.check_from" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Check # To : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.check_to" class="form-control" required>
+                            </div>
+                        </div>-->
+                        
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">اکائونٹ قسم : </strong>
+                            <div class="form-group">
+                                <select ng-model="form.account_type" class="account_type urdu">
+                                <option ng-selected="{{x.id == form.account_type}}"
+                                 ng-repeat="x in accountType" value="{{x.id}}">{{x.title}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">اوپننگ بیلنس </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="form.opening_balance" class="form-control urdu" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <strong class="urdu-lable">پتہ : </strong>
+                            <div class="form-group" >
+                                <textarea ng-model="form.address" class="form-control urdu" required>
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>سٹیٹس : </strong>
+                            <div class="form-group" >
+                                <input type="radio" ng-model="form.status" value="enable"> Enable
+                                <input type="radio" ng-model="form.status" value="disable"> Disable
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>SMS : </strong>
+                            <div class="form-group" >
+                                <input type="radio" ng-model="form.sms" value="yes" checked="checked"> Yes
+                                <input type="radio" ng-model="form.sms" value="no"> No
+                            </div>
+                        </div>   
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="editItem.$invalid" class="btn btn-primary create-crud">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="closing" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="closing" role="form" ng-submit="closingToday()">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">کھاتہ کلوز</h4>
+            </div>
+            <div class="modal-body account">
+                <div class="">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">تاریخ  : </strong>
+                            <div class="form-group">
+                                <input class="form-control date-picker reset" id="date" required="required" ng-model="form.date" value="" placeholder="select Date">
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="closing.$invalid" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="config_form" role="form" ng-submit="config_data()">
+                <input ng-model="form.id" type="hidden" placeholder="Name" name="name" class="form-control" />
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">سیٹنگ</h4>
+            </div>
+            <div class="modal-body account">
+                <div class="">
+                    <div class="row">
+                        <div class="col-md-6">
+                        	<strong class="urdu-lable">کمپنی نام : </strong>
+                            <div class="form-group">
+                               <input ng-model="config.name" type="text" placeholder="Name" name="title" class="form-control urdu" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <strong class="urdu-lable">فون : </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="config.phone" class="form-control urdu" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>Mall Roakker Sms Template : Variables {name} ,{weight} , {rate} ,{total} </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="config.mall_roakker_sms" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>Sale Sms Template : Variables {name},{amount},{detail} </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="config.sale_sms" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>Transection Sms Template : variables {name},{amount},{payment_type},{detail} </strong>
+                            <div class="form-group" >
+                                <input type="text" ng-model="config.transection_sms" class="form-control" required>
+                            </div>
+                        </div>                        
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="config_form.$invalid" class="btn btn-primary create-crud">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+   /* @media print {
+    body * {
+        visibility: hidden;
+    }
+    #print_ * {
+        visibility:visible;		
+    }
+	#print_ {
+		overflow:scroll !important;
+	}
+	
+
+    
+}*/
+
+    
+    </style>
+
+<div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content text_right" id="print_">
+        
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">اکائونٹ تفصیل {{account.name}}</h4>
+            </div>
+            <div class="modal-body account">
+                <div class="row">
+                	<div ng-if="mall_roakker_detail">
+                	<h3 class="urdu">مال روکڑ(نام) </h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>آڑھت</th>
+                                    <th>ٹوٹل</th>    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in mall_roakker_detail">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.rate }}</td>
+                                    <td>{{ x.weight }}</td>
+                                    <td>{{ x.arhat.toFixed(2) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="5"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_mall).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="mall_roakker_detail_jama">
+                    <h3 class="urdu">مال روکڑ (جمع)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>آڑھت</th>
+                                    <th>ٹوٹل</th>     
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in mall_roakker_detail_jama">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.rate }}</td>
+                                    <td>{{ x.weight }}</td>
+                                    <td>{{ x.chong_amount.toFixed(2) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="5"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_mall_jama).toFixed(2) }}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="transection_detail_receive_jama">
+                    <h3 class="urdu">آئٹم وصولی (مال روکڑ)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>ٹوٹل</th>                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_receive_jama">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.item_name }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ (x.price*x.quantity).toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_recieve = amountTotal(transection_detail_receive_jama)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="transection_detail_receive_naam">
+                    <h3 class="urdu">آئٹم وصولی (مال روکڑ)نام</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>ٹوٹل</th>                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_receive_naam">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.item_name }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ (x.price*x.quantity).toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_recieve_naam = amountTotal(transection_detail_receive_naam)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                   <div ng-if="sales_items_detail">
+                    <h3 class="urdu">سیل روکڑ (نام)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>                                    
+                                    <th>رقم</th>                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in sales_items_detail">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.amount }}</td>
+                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_sale = amountTotal(sales_items_detail)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="sales_items_detail_jama">
+                    <h3 class="urdu">سیل روکڑ (جمع)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>رقم</th>
+                                    <!--<th>item Name</th>                                   
+                                    <th>pprice</th>
+                                    <th>sprice</th>
+                                    <th>bashat</th>-->
+                                                 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in sales_items_detail_jama">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ (x.amount).toFixed(2) }}</td>
+                                    <!--<td>{{ x.item_name }}</td>
+                                    <td>{{ (x.purchase_price).toFixed(2) }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ (x.price-x.purchase_price).toFixed(2) }}</td>-->
+                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_sale_jama = amountTotal(sales_items_detail_jama)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="direct_sales_items_detail">
+                    <h3 class="urdu">ڈائریکٹ سیل روکڑ (نام)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>مقدار</th>
+                                    <th>قیمت</th>
+                                    <th>رقم</th>   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in direct_sales_items_detail">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ running_seller_total(x.price , (x.price*x.purchaser_percentage/100)) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_running_sale = amountTotal(direct_sales_items_detail)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="direct_sales_items_detail_jama">
+                    <h3 class="urdu">ڈائریکٹ سیل روکڑ (جمع)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                           <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>مقدار</th>
+                                    <th>قیمت</th>
+                                    <th>رقم</th>   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in direct_sales_items_detail_jama">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ running_seller_total(x.price , (x.price*x.saler_percentage/100)) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_running_sale_jama = amountTotal(direct_sales_items_detail_jama)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="transection_detail_jama">
+                    <h3 class="urdu">نقدی روکڑ جمع</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>تفصیل</th>
+                                    <th>رقم</th>                                                 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_jama">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.detail }}</td>
+                                    <td>{{ x.amount }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="3"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_jama = amountTotal(transection_detail_jama)}}</strong></td>
+                                  </tr>              
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="transection_detail_naam">
+                    <h3 class="urdu">نقدی روکڑ نام </h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>تفصیل</th>
+                                    <th>رقم</th>                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_naam">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.detail }}</td>
+                                    <td>{{ x.amount }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="3"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ amount_naam = amountTotal(transection_detail_naam)}}</strong></td>
+                                  </tr>            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                            	<tr>
+                                    <th>اوپننگ بیلنس</th>
+                                    <th>{{ (account.opening_balance).toFixed(2)}}</th>               
+                                </tr>
+                                <tr ng-if="total_mall">
+                                    <th>ٹوٹل مال روکڑ</th>
+                                    <th>{{ (total_mall).toFixed(2)}}</th>               
+                                </tr>
+                                <tr ng-if="total_mall_jama">
+                                    <th>ٹوٹل مال روکڑ جمع</th>
+                                    <th>{{ (total_mall_jama).toFixed(2)}}</th>               
+                                </tr>
+                                <tr ng-if="total_receive_jama">
+                                    <th>ٹوٹل وسولی (مال روکڑ)</th>
+                                    <th>{{ (total_receive_jama).toFixed(2)}}</th>               
+                                </tr>
+                                <tr ng-if="total_receive_naam">
+                                    <th>ٹوٹل وسولی (مال روکڑ)نام</th>
+                                    <th>{{ (total_receive_naam).toFixed(2)}}</th>               
+                                </tr>
+                                <tr ng-if="total_sale_naam">
+                                    <th>ٹوٹل سیل (نام)</th>
+                                    <th>{{ (total_sale_naam).toFixed(2)}}</th>   
+                                </tr>
+                                <tr ng-if="total_sale_jama">
+                                    <th>ٹوٹل سیل (جمع)</th>
+                                    <th>{{ (total_sale_jama).toFixed(2)}}</th>   
+                                </tr>
+                                <tr ng-if="total_dsale_naam">
+                                    <th>ٹوٹل ڈائریکٹ سیل (نام)</th>
+                                    <th>{{ (total_dsale_naam).toFixed(2)}}</th>   
+                                </tr>
+                                <tr ng-if="total_dsale_jama">
+                                    <th>ٹوٹل ڈائریکٹ سیل (جمع)</th>
+                                    <th>{{ (total_dsale_jama).toFixed(2)}}</th>   
+                                </tr>
+                                <tr ng-if="total_naqdi_jama">
+                                    <th>ٹوٹل جمع</th>
+                                    <th>{{ (total_naqdi_jama).toFixed(2)}}</th>               
+                                </tr>                                
+                                
+                                <tr ng-if="total_naqdi_naam">
+                                    <th>ٹوٹل نام</th>
+                                    <th>{{ (total_naqdi_naam).toFixed(2)}}</th>               
+                                </tr>
+                                
+                                <tr>
+                                    <th>بیلنس</th>
+                                    <th>{{ balance }}</th>               
+                                </tr>
+                            </thead>      
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
+                    <button type="button" class="btn btn-default" ng-click="printDiv()">Print</button>  
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="detailshop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content text_right" id="print_">
+        
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">اکائونٹ تفصیل {{account.name}}</h4>
+            </div>
+            <div class="modal-body account">
+                <div class="row">
+                	<div ng-if="mall_roakker_detail">
+                	<h3 class="urdu">مال روکڑ(نام) </h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>آڑھت</th>
+                                    <th>ٹوٹل</th>    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in mall_roakker_detail">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.rate }}</td>
+                                    <td>{{ x.weight }}</td>
+                                    <td>{{ x.arhat.toFixed(2) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="5"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_mall).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="mall_roakker_detail_jama">
+                    <h3 class="urdu">مال روکڑ (جمع)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>آڑھت</th>
+                                    <th>ٹوٹل</th>     
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in mall_roakker_detail_jama">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.rate }}</td>
+                                    <td>{{ x.weight }}</td>
+                                    <td>{{ x.chong_amount.toFixed(2) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="5"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_mall_jama).toFixed(2) }}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="transection_detail_receive_jama">
+                    <h3 class="urdu">آئٹم وصولی (مال روکڑ)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>ٹوٹل</th>                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_receive_jama">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.item_name }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ (x.price*x.quantity).toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_recieve = amountTotal(transection_detail_receive_jama)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="transection_detail_receive_naam">
+                    <h3 class="urdu">آئٹم وصولی (مال روکڑ)نام</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>ٹوٹل</th>                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_receive_naam">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.item_name }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ (x.price*x.quantity).toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_recieve_naam = amountTotal(transection_detail_receive_naam)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                   <div ng-if="sales_items_detail">
+                    <h3 class="urdu">سیل روکڑ (نام)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>                                    
+                                    <th>رقم</th>                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in sales_items_detail">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.amount }}</td>
+                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_sale = amountTotal(sales_items_detail)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="sales_items_detail_jama">
+                    <h3 class="urdu">سیل روکڑ (جمع)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>رقم</th>
+                                    <!--<th>item Name</th>                                   
+                                    <th>pprice</th>
+                                    <th>sprice</th>
+                                    <th>bashat</th>-->
+                                                 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in sales_items_detail_jama">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ (x.amount).toFixed(2) }}</td>
+                                    <!--<td>{{ x.item_name }}</td>
+                                    <td>{{ (x.purchase_price).toFixed(2) }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ (x.price-x.purchase_price).toFixed(2) }}</td>-->
+                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_sale_jama = amountTotal(sales_items_detail_jama)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="direct_sales_items_detail">
+                    <h3 class="urdu">ڈائریکٹ سیل روکڑ (نام)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>مقدار</th>
+                                    <th>قیمت</th>
+                                    <th>رقم</th>   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in direct_sales_items_detail">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ x.amount }}</td>
+                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_running_sale = amountTotal(direct_sales_items_detail)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="direct_sales_items_detail_jama">
+                    <h3 class="urdu">ڈائریکٹ سیل روکڑ (جمع)</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                           <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>مقدار</th>
+                                    <th>قیمت</th>
+                                    <th>رقم</th>   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in direct_sales_items_detail_jama">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ x.amount }}</td>
+                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_running_sale_jama = amountTotal(direct_sales_items_detail_jama)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="transection_detail_jama">
+                    <h3 class="urdu">نقدی روکڑ جمع</h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>تفصیل</th>
+                                    <th>رقم</th>                                                 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_jama">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.detail }}</td>
+                                    <td>{{ x.amount }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="3"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{amount_jama = amountTotal(transection_detail_jama)}}</strong></td>
+                                  </tr>              
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div ng-if="transection_detail_naam">
+                    <h3 class="urdu">نقدی روکڑ نام </h3>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                	<th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>تفصیل</th>
+                                    <th>رقم</th>                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_naam">
+                                	<td>{{ x.date }}</td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.detail }}</td>
+                                    <td>{{ x.amount }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="3"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ amount_naam = amountTotal(transection_detail_naam)}}</strong></td>
+                                  </tr>            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    </div>
+                    <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                            	<tr>
+                                    <th>اوپننگ بیلنس</th>
+                                    <th>{{ (account.opening_balance).toFixed(2)}}</th>               
+                                </tr>
+                                <tr ng-if="total_mall">
+                                    <th>ٹوٹل مال روکڑ</th>
+                                    <th>{{ (total_mall).toFixed(2)}}</th>               
+                                </tr>
+                                <tr ng-if="total_mall_jama">
+                                    <th>ٹوٹل مال روکڑ جمع</th>
+                                    <th>{{ (total_mall_jama).toFixed(2)}}</th>               
+                                </tr>
+                                <tr ng-if="total_receive_jama">
+                                    <th>ٹوٹل وسولی (مال روکڑ)</th>
+                                    <th>{{ (total_receive_jama).toFixed(2)}}</th>               
+                                </tr>
+                                <tr ng-if="total_receive_naam">
+                                    <th>ٹوٹل وسولی (مال روکڑ)نام</th>
+                                    <th>{{ (total_receive_naam).toFixed(2)}}</th>               
+                                </tr>
+                                <tr ng-if="total_sale_naam">
+                                    <th>ٹوٹل سیل (نام)</th>
+                                    <th>{{ (total_sale_naam).toFixed(2)}}</th>   
+                                </tr>
+                                <tr ng-if="total_sale_jama">
+                                    <th>ٹوٹل سیل (جمع)</th>
+                                    <th>{{ (total_sale_jama).toFixed(2)}}</th>   
+                                </tr>
+                                <tr ng-if="total_dsale_naam">
+                                    <th>ٹوٹل ڈائریکٹ سیل (نام)</th>
+                                    <th>{{ (total_dsale_naam).toFixed(2)}}</th>   
+                                </tr>
+                                <tr ng-if="total_dsale_jama">
+                                    <th>ٹوٹل ڈائریکٹ سیل (جمع)</th>
+                                    <th>{{ (total_dsale_jama).toFixed(2)}}</th>   
+                                </tr>
+                                <tr ng-if="total_naqdi_jama">
+                                    <th>ٹوٹل جمع</th>
+                                    <th>{{ (total_naqdi_jama).toFixed(2)}}</th>               
+                                </tr>                                
+                                
+                                <tr ng-if="total_naqdi_naam">
+                                    <th>ٹوٹل نام</th>
+                                    <th>{{ (total_naqdi_naam).toFixed(2)}}</th>               
+                                </tr>
+                                
+                                <tr>
+                                    <th>بیلنس</th>
+                                    <th>{{ balance }}</th>               
+                                </tr>
+                            </thead>      
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
+                    <button type="button" class="btn btn-default" ng-click="printDiv()">Print</button>  
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="rokkar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+		<div class="modal-content" id="print_rokkar">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">کھاتہ چٹھا</h4>
+            </div>
+            <div class="card-content table-responsive">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>                                	
+                                    <th>نام</th>
+                                    <th>رقم جمع</th>
+                                    <th>رقم نام</th>                                    
+                                    <th> بیلینس جمع</th>
+                                    <th> بیلینس نام</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in naam_jama_detail">
+                                	<td>{{ x.name }}</td>
+                                    <td>{{ x.jama_amount.toFixed(2) }}</td>
+                                    <td>{{ x.naam_amount.toFixed(2) }}</td>                                    
+                                    <td><span ng-if="x.balance>=0" >{{ x.balance.toFixed(2) }}</span></td>
+                                    <td><span ng-if="x.balance<0" >{{ x.balance.toFixed(2) }}</span></td>
+                                    <!--<td>{{ x.balance.toFixed(2) }}</td>-->
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td><strong>ٹوٹل</strong></td>
+                                    <td>{{ total_naam.toFixed(2) }}</td>
+                                    <td>{{ total_jama.toFixed(2) }}</td>
+                                    <!--<td>{{ total_balance.toFixed(2) }}</td>-->
+                                    <td>{{ jama.toFixed(2) }}</td>
+                                    <td>{{ naam.toFixed(2) }}</td>
+                                  </tr>            
+                            </tfoot>
+                        </table>                        
+                    </div>
+                    <button type="button" class="btn btn-default" ng-click="printRokkar()">Print</button> 
+        </div>
+    </div>
+</div>
+
+<!---mall rokkar detail ---->
+<div class="modal fade" id="mall_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"  style="width:auto; margin:80px 10px 10px 10px">
+		<div class="modal-content" id="print_rokkar">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">مال روکڑ تفصیل {{account.name}} </h4>
+            </div>
+            <div class="row">
+            	<div class="col-md-6">
+                	<h4 class="modal-title urr" >مال روکڑ جمع </h4>
+                	<div class="card-content table-responsive">
+                    	<div ng-if="mall_roakker_detail_jama">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>آڑھت</th>
+                                    <th>ٹوٹل</th>    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in mall_roakker_detail_jama">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.rate }}</td>
+                                    <td>{{ x.weight }}</td>
+                                    <td>{{ x.chong_amount.toFixed(2) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="5"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_mall_jama).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>
+                        </div>
+                                             
+                    </div>
+                </div>
+                <div class="col-md-6">
+                	<h4 class="modal-title urr" >مال روکڑ نام </h4>
+                	<div class="card-content table-responsive">
+                    <div ng-if="mall_roakker_detail">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>آڑھت</th>
+                                    <th>ٹوٹل</th>    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in mall_roakker_detail">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.rate }}</td>
+                                    <td>{{ x.weight }}</td>
+                                    <td>{{ x.arhat.toFixed(2) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="5"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_mall).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>
+                        </div>
+                                               
+                    </div>
+                    
+                </div>
+                <table class="table table-urdu">
+                    	<tr>
+                        	<th align="right">بیلنس</th><th>{{ (balance)}}</th>
+                        </tr>
+                    </table>
+            </div>
+                    <button type="button" class="btn btn-default" ng-click="printmall_detail()">Print</button> 
+        </div>
+    </div>
+</div>
+<!-------end mall rokkar detail----->
+<!---- naqdi rokker detail ---->
+<div class="modal fade" id="naqdi_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"  style="width:auto; margin:80px 10px 10px 10px">
+		<div class="modal-content" id="print_naqdi">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">نقدی روکڑ تفصیل {{account.name}} </h4>
+            </div>
+            <div class="row">
+            	<div class="col-md-6">
+                	<h4 class="modal-title urr" >نقدی روکڑ جمع </h4>
+                	<div class="card-content table-responsive">
+                    <div ng-if="transection_detail_jama">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>تفصیل</th>
+                                    <th>رقم</th>                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_jama">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.detail }}</td>
+                                    <td>{{ x.amount }}</td>                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_naqdi_jama).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table> 
+                        </div>
+                        
+                        <div ng-if="transection_detail_receive_jama">
+                        <h4 class="modal-title urr" >مال وصول جمع </h4>
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>ٹوٹل</th>                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_receive_jama">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.item_name }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ (x.price*x.quantity).toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{total_receive_jama}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>   
+                        </div>
+                        
+                        <!-----naqdi rokker sale items detail----->  
+                        <div ng-if="sales_items_detail_jama">
+                           <h4 class="modal-title urr" >سیل روکڑ جمع </h4>                  
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>قیمت</th>
+                                    <th>مقدار</th>
+                                    <th>نقد/ادھار</th>
+                                    <th>پرسنٹ</th>
+                                    <th>ٹوٹل</th>                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in sales_items_detail_jama">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.sale_item_name }}</td>
+                                    <td>{{ x.price }}</td>  
+                                    <td>{{ x.quantity }}</td> 
+                                    <td>{{ x.payment_type }}</td>   
+                                    <td>{{ x.intrest }}</td>  
+                                    <td>{{ (x.price*x.quantity)+((x.price*x.quantity)+x.intrest/100) }}</td>                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="6"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_sale_jama).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table> 
+                        </div>
+                        <!-----end naqdi rokker sale items detail---->
+                    </div>
+                </div>
+                <div class="col-md-6">
+                	<h4 class="modal-title urr" >نقدی روکڑ نام </h4>
+                	<div class="card-content table-responsive">
+                    <div ng-if="transection_detail_naam">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>تفصیل</th>
+                                    <th>رقم</th>                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_naam">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.detail }}</td>
+                                    <td>{{ x.amount }}</td>                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_naqdi_naam).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>                        
+                        </div>
+                        
+                        <div ng-if="transection_detail_receive_naam">
+                        <h4 class="modal-title urr" >مال وصول نام </h4>
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>ٹوٹل</th>                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_receive_naam">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.item_name }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ (x.price*x.quantity).toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{total_receive_naam}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table> 
+                        </div>
+                        
+                        <!-----naqdi rokker sale items detail-----> 
+                        <div ng-if="sales_items_detail">   
+                        <h4 class="modal-title urr" >سیل روکڑ نام </h4>                   
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>قیمت</th>
+                                    <th>مقدار</th>
+                                    <th>نقد/ادھار</th>
+                                    <th>پرسنٹ</th>
+                                    <th>ٹوٹل</th>                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in sales_items_detail">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.sale_item_name }}</td>
+                                    <td>{{ x.price }}</td>  
+                                    <td>{{ x.quantity }}</td> 
+                                    <td>{{ x.payment_type }}</td>   
+                                    <td>{{ x.intrest }}</td>  
+                                    <td>{{ (x.price*x.quantity)+((x.price*x.quantity) * (x.intrest/100))}}</td>                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="6"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_sale_naam).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>
+                        </div> 
+                        <!-----end naqdi rokker sale items detail---->
+                        
+                    </div>
+                    
+                </div>
+                <table class="table table-urdu">
+                		<tr>
+                        	<th align="right">اوپننگ بیلنس</th><th>{{ (account.opening_balance)}}</th>
+                        </tr>
+                    	<tr>
+                        	<th align="right">بیلنس</th><th>{{ (balance)}}</th>
+                        </tr>
+                    </table>
+            </div>
+                    <button type="button" class="btn btn-default" ng-click="printnaqdi_detail()">Print</button> 
+        </div>
+    </div>
+</div>
+<!--- end naqdi roakker detail --->
+
+<!---product detail --->
+<div class="modal fade" id="prod_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"  style="width:auto; margin:80px 10px 10px 10px">
+		<div class="modal-content" id="print_prod">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">مال تفصیل {{account.name}} </h4>
+            </div>
+            <div class="row">
+            	<div class="col-md-6">
+                	<h4 class="modal-title urr" >مال وصول جمع </h4>
+                	<div class="card-content table-responsive">
+                    	<div ng-if="transection_detail_receive_jama">
+                            <table class="table table-bordered pagin-table table-urdu">
+                                <thead>
+                                    <tr>
+                                        <th>نام</th>
+                                        <th>آئٹم نام</th>
+                                        <th>ریٹ</th>
+                                        <th>وزن</th>
+                                        <th>ٹوٹل</th>                   
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in transection_detail_receive_jama">
+                                        <td>{{ x.name }}</td>
+                                        <td>{{ x.item_name }}</td>
+                                        <td>{{ (x.price).toFixed(2) }}</td>
+                                        <td>{{ x.quantity }}</td>
+                                        <td>{{ (x.price*x.quantity).toFixed(2) }}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4"><strong>ٹوٹل</strong></td>
+                                        <td><strong>{{total_receive_jama}}</strong></td>
+                                      </tr>                            
+                                </tfoot>
+                            </table> 
+                        </div>
+                        <div ng-if="sales_items_detail_jama">
+                           <h4 class="modal-title urr" >سیل روکڑ جمع </h4>                  
+                            <table class="table table-bordered pagin-table table-urdu">
+                                <thead>
+                                    <tr>
+                                        <th>تاریخ</th>
+                                        <th>نام</th>
+                                        <th>قیمت خرید</th>
+                                        <th>قیمت فروخت</th>
+                                        <th>مقدار</th>
+                                        <th>پرسنٹ</th>
+                                        <th>ٹوٹل</th>                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in sales_items_detail_jama">
+                                        <td>{{ x.date }}</td>
+                                        <td>{{ x.sale_item_name }}</td>
+                                        <td>{{ (x.purchase_price).toFixed(2) }}</td> 
+                                         <td>{{ (x.price).toFixed(2) }}</td>  
+                                        <td>{{ x.quantity }}</td>  
+                                        <td>{{ x.intrest }}</td>  
+                                        <td>{{ ((x.price*x.quantity)+((x.price*x.quantity)*x.intrest/100)).toFixed(2) }}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>  
+                                    <tr>
+                                        <td colspan="6"><strong>ٹوٹل</strong></td>
+                                        <td><strong>{{ (total_sale_jama).toFixed(2)}}</strong></td>
+                                      </tr>                              
+                                </tfoot>
+                            </table> 
+                        </div>
+                        <div ng-if="pro_transection_detail_jama">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>تفصیل</th>
+                                    <th>رقم</th>                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in pro_transection_detail_jama">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.detail }}</td>
+                                    <td>{{ (x.amount).toFixed(2) }}</td>                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (pro_total_naqdi_jama).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>                        
+                        </div>  
+                     </div>                    
+                </div>
+                
+                <div class="col-md-6">                	
+                	<div class="card-content table-responsive">                    
+                        <div ng-if="transection_detail_receive_naam">
+                        <h4 class="modal-title urr" >مال وصول نام </h4>
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>ٹوٹل</th>                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_receive_naam">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.item_name }}</td>
+                                    <td>{{ (x.price).toFixed(2) }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ (x.price*x.quantity).toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{(total_receive_naam).toFixed(2)}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table> 
+                        </div> 
+                        <div ng-if="sales_items_detail">   
+                        <h4 class="modal-title urr" >سیل روکڑ نام </h4>                   
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>قیمت خرید</th>
+                                    <th>قیمت فروخت</th>
+                                    <th>مقدار</th>
+                                    <th>پرسنٹ</th>
+                                    <th>ٹوٹل</th>                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in sales_items_detail">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.sale_item_name }}</td>
+                                    <td>{{ (x.purchase_price).toFixed(2) }}</td> 
+                                    <td>{{ (x.price).toFixed(2) }}</td>  
+                                    <td>{{ x.quantity }}</td>    
+                                    <td>{{ x.intrest }}</td>  
+                                    <td>{{ ((x.price*x.quantity)+((x.price*x.quantity) * (x.intrest/100))).toFixed(2)}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="6"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_sale_naam).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>
+                        </div>
+                        <div ng-if="pro_transection_detail_naam">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>تفصیل</th>
+                                    <th>رقم</th>                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in pro_transection_detail_naam">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.detail }}</td>
+                                    <td>{{ (x.amount).toFixed(2) }}</td>                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (pro_total_naqdi_naam).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>                        
+                        </div>                      
+                    </div>                   
+                </div>
+                <table class="table table-urdu">
+                		<tr>
+                        	<th align="right">اوپننگ بیلنس</th><th>{{ (account.opening_balance)}}</th>
+                        </tr>
+                    	<tr>
+                        	<th align="right">بیلنس</th><th>{{ (balance)}}</th>
+                        </tr>
+                    </table>
+                
+            </div>
+            <!-----mall sale detail ----->            
+            
+            <!----- end mall sale detail ---->
+                    <button type="button" class="btn btn-default" ng-click="printprod_detail()">Print</button> 
+        </div>
+    </div>
+</div>
+<!----- end product detail ----->
+
+
+<!--   new detail for services khata jat --->
+
+<div class="modal fade" id="ser_mall_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"  style="width:auto; margin:80px 10px 10px 10px">
+		<div class="modal-content" id="print_ser_rokkar">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">مال روکڑ تفصیل {{account.name}} </h4>
+            </div>
+            <div class="row">
+            	<div class="col-md-6">
+                	<h4 class="modal-title urr" >مال روکڑ جمع </h4>
+                	<div class="card-content table-responsive">
+                    	<div ng-if="mall_roakker_detail_jama">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>آڑھت</th>
+                                    <th>ٹوٹل</th>    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in mall_roakker_detail_jama">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.rate }}</td>
+                                    <td>{{ x.weight }}</td>
+                                    <td>{{ x.chong_amount.toFixed(2) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="5"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_mall_jama).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>
+                        </div>
+                                             
+                    </div>
+                </div>
+                <div class="col-md-6">
+                	<h4 class="modal-title urr" >مال روکڑ نام </h4>
+                	<div class="card-content table-responsive">
+                    <div ng-if="mall_roakker_detail">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>آڑھت</th>
+                                    <th>ٹوٹل</th>    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in mall_roakker_detail">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.title }}</td>
+                                    <td>{{ x.rate }}</td>
+                                    <td>{{ x.weight }}</td>
+                                    <td>{{ x.arhat.toFixed(2) }}</td>
+                                    <td>{{ x.amount.toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="5"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_mall).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>
+                        </div>
+                                               
+                    </div>
+                    
+                </div>
+                <table class="table table-urdu">
+                    	<tr>
+                        	<th align="right">بیلنس</th><th>{{ (balance)}}</th>
+                        </tr>
+                    </table>
+            </div>
+                    <button type="button" class="btn btn-default" ng-click="printser_detail()">Print</button> 
+        </div>
+    </div>
+</div>
+<!-------end mall rokkar detail----->
+<!---- naqdi rokker detail ---->
+<div class="modal fade" id="ser_naqdi_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"  style="width:auto; margin:80px 10px 10px 10px">
+		<div class="modal-content" id="print_ser_naqdi">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">نقدی روکڑ تفصیل {{account.name}} </h4>
+            </div>
+            <div class="row">
+            	<div class="col-md-6">
+                	<h4 class="modal-title urr" >نقدی روکڑ جمع </h4>
+                	<div class="card-content table-responsive">
+                    <div ng-if="transection_detail_jama">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>تفصیل</th>
+                                    <th>رقم</th>                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_jama">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.detail }}</td>
+                                    <td>{{ (x.amount).toFixed(2) }}</td>                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_naqdi_jama).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table> 
+                        </div>
+                        
+                        <div ng-if="transection_detail_receive_jama">
+                        <h4 class="modal-title urr" >مال وصول جمع </h4>
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>ٹوٹل</th>                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_receive_jama">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.item_name }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ (x.amount).toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{total_receive_jama}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table>   
+                        </div>
+                        
+                        <!-----naqdi rokker sale items detail----->  
+                        <div ng-if="sales_items_detail_jama">
+                           <h4 class="modal-title urr" >سیل روکڑ جمع </h4>                  
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>قیمت</th>
+                                    <th>مقدار</th>
+                                    <th>نقد/ادھار</th>
+                                    <th>پرسنٹ</th>
+                                    <th>ٹوٹل</th>                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in sales_items_detail_jama">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.sale_item_name }}</td>
+                                    <td>{{ x.price }}</td>  
+                                    <td>{{ x.quantity }}</td> 
+                                    <td>{{ x.payment_type }}</td>   
+                                    <td>{{ x.intrest }}</td>  
+                                    <td>{{ (x.amount).toFixed(2) }}</td>                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="6"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_sale_jama).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table> 
+                        </div>
+                        <!-----end naqdi rokker sale items detail---->
+                    </div>
+                </div>
+                <div class="col-md-6">
+                	<h4 class="modal-title urr" >نقدی روکڑ نام </h4>
+                	<div class="card-content table-responsive">
+                    <div ng-if="transection_detail_naam">
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>تفصیل</th>
+                                    <th>رقم</th>                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_naam">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.detail }}</td>
+                                    <td>{{ (x.amount).toFixed(2) }}</td>                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="2"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_naqdi_naam).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>                        
+                        </div>
+                        
+                        <div ng-if="transection_detail_receive_naam">
+                        <h4 class="modal-title urr" >مال وصول نام </h4>
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>نام</th>
+                                    <th>آئٹم نام</th>
+                                    <th>ریٹ</th>
+                                    <th>وزن</th>
+                                    <th>ٹوٹل</th>                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in transection_detail_receive_naam">
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.item_name }}</td>
+                                    <td>{{ x.price }}</td>
+                                    <td>{{ x.quantity }}</td>
+                                    <td>{{ (x.amount).toFixed(2) }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                                    <td colspan="4"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{total_receive_naam}}</strong></td>
+                                  </tr>                            
+                            </tfoot>
+                        </table> 
+                        </div>
+                        
+                        <!-----naqdi rokker sale items detail-----> 
+                        <div ng-if="sales_items_detail">   
+                        <h4 class="modal-title urr" >سیل روکڑ نام </h4>                   
+                        <table class="table table-bordered pagin-table table-urdu">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>نام</th>
+                                    <th>قیمت</th>
+                                    <th>مقدار</th>
+                                    <th>نقد/ادھار</th>
+                                    <th>پرسنٹ</th>
+                                    <th>ٹوٹل</th>                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in sales_items_detail">
+                                    <td>{{ x.date }}</td>
+                                    <td>{{ x.sale_item_name }}</td>
+                                    <td>{{ x.price }}</td>  
+                                    <td>{{ x.quantity }}</td> 
+                                    <td>{{ x.payment_type }}</td>   
+                                    <td>{{ x.intrest }}</td>  
+                                    <td>{{ (x.amount).toFixed(2)}}</td>                                    
+                                </tr>
+                            </tbody>
+                            <tfoot>  
+                            	<tr>
+                                    <td colspan="6"><strong>ٹوٹل</strong></td>
+                                    <td><strong>{{ (total_sale_naam).toFixed(2)}}</strong></td>
+                                  </tr>                              
+                            </tfoot>
+                        </table>
+                        </div> 
+                        <!-----end naqdi rokker sale items detail---->
+                        
+                    </div>
+                    
+                </div>
+                <table class="table table-urdu">
+                		<tr>
+                        	<th align="right">اوپننگ بیلنس</th><th>{{ (account.opening_balance)}}</th>
+                        </tr>
+                    	<tr>
+                        	<th align="right">بیلنس</th><th>{{ (balance)}}</th>
+                        </tr>
+                    </table>
+            </div>
+                    <button type="button" class="btn btn-default" ng-click="printser_naqdi()">Print</button> 
+        </div>
+    </div>
+</div>
+<!--- end naqdi roakker detail --->
+<!---- end detail for services khata jat--->
+<script>
+$('.date-picker').datepicker( {
+	changeMonth: true,
+	changeYear: true,
+	showButtonPanel: true,
+	autoclose:true,
+	todayHighlight:true,		
+	format: 'dd/mm/yyyy',        
+    });
+	
+
+</script>

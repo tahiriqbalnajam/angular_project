@@ -1,0 +1,137 @@
+<style>
+.remove {
+    background: #c76868 none repeat scroll 0 0;
+    border: 0 none;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 100%;
+    padding: 4px 9px;
+    vertical-align: top;
+}
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title urr">سیل</h4>
+                <p class="category urr">سیل کی تفصیل درج کریں</p>                
+                <div class="btn-right" style="float:right; margin:-58px 1px">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <a class="btn btn-success ur" href="#/sales"> کینسل</a>
+                </div>
+            </div>
+            <div class="card-content">
+            <form method="POST" name="addItem" role="form" ng-submit="">            
+                <div class="row">
+                    	<div class="row">
+                        	<div class="col-md-3">
+                                <div class="form-group label-floating">
+                                    <label class="control-label urdu-lable"> خریدار کھاتہ</label>
+                                    <select ng-model="form.former" class="form-control select2" required ng-change="account_detail(form.former)">
+                                    <option ng-repeat="x in formers" value="{{x.id}}">{{x.name}} ({{x.account_number}})</option>
+                                    </select>
+                                </div>
+                             </div>
+                             <div class="col-md-3">
+                             	<div class="form-group label-floating">
+                             		<label class="control-label urdu-lable"> بیلنس</label>
+                             		<strong class="urdu-lable">{{accountdetaildata}} </strong>
+                                </div>
+                             </div>
+                             <div class="col-md-3">
+                                <div class="form-group label-floating">
+                                    <label class="control-label urdu-lable"> تفصیل</label>
+                                    <input type="text" ng-model="form.detail" class="form-control" >
+                                </div>
+                             </div>
+                             <!--<div class="col-md-2">
+                                <div class="form-group label-floating">
+                                    <label class="control-label urdu-lable"> چیک نمبر</label>
+                                    <input type="text" ng-model="form.check_no" class="form-control" >
+                                </div>
+                             </div>-->
+                             <div class="col-md-2">
+                                <div class="form-group label-floating">
+                                    <label class="control-label urdu-lable">فروخت/واپسی</label>
+                                    <select ng-model="form.sale_type" class="form-control" required>
+                                    <option ng-repeat="x in opts" value="{{x.value}}">{{x.text}}</option>
+                                    </select>
+                                </div>
+                             </div>
+                             
+                             
+                         </div>
+                         
+                         
+                         <div  data-ng-repeat="choice in choices">
+                            <div class="row">                        	
+                                <div class="col-md-3">
+                                    <div class="form-group label-floating">
+                                    <label class="control-label urdu-lable"> Select Item {{choice.id}}</label>
+                                    <select ng-model="choice.saleitem" name="form.item{{choice.id}}"  class="form-control select2" required>
+                                    <option ng-repeat="s in all_items" value="{{s.id}}">{{s.name}} (Qty:{{s.quantity}})</option>
+                                    </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label urdu-lable"> قیمت</label>
+                                        <input type="text" id="price" ng-model="choice.price"  class="form-control" required="required">
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label urdu-lable" > مقدار</label>
+                                        <input type="text" id="quantity" ng-model="choice.qty"  class="form-control" required="required">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label urdu-lable"> ٹوٹل</label>
+                                        <div>{{choice.total =choice.price*choice.qty}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label urdu-lable">  نقد/ادھار</label>
+                                    <select ng-model="choice.payment_type" class="form-control" required>
+                                    <option ng-repeat="op in optionss" value="{{op.value}}">{{op.text}}</option>
+                                    </select>
+                                </div>
+                             </div>
+                             <div class="col-md-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label urdu-lable">  پرسنٹ</label>
+                                    <input type="text" id="intrest" ng-model="choice.intrest"  class="form-control" required="required">
+                                </div>
+                             </div>
+                                <div class="col-md-1">
+                                	<div class="form-group label-floating">
+		                                <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button>
+                                    </div>
+                                </div>
+                            </div>                    
+                        </div>
+                         ٹوٹل : {{getRunningTotal(0)}} 
+                </div>
+                    <button type="submit" ng-disabled="addItem.$invalid" class="btn btn-primary" ng-click="saveAdd()">Submit</button>
+            </form>
+            
+				   <button class="btn btn-info" ng-click="addNewChoice()">Add fields</button>
+            </div>                        
+        </div>
+    </div>
+</div>
+
+<script>
+	$(function () {			
+		$(".select2").select2();
+	});
+	
+
+	
+	</script>

@@ -1,0 +1,301 @@
+﻿<style type="text/css">
+.red {
+    background: red; 
+}
+
+.black {
+    background:tranparent;
+}
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+        
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title urr">سیلز آئٹم مینیجمنت</h4>
+                <p class="category urr">یہاں سے سیل آیٹم مینج کریں</p>
+                <!--<div class="pull-right" style="padding-top:30px">
+                <div class="box-tools" style="display:inline-table">
+                  <div class="input-group">-->
+                  <input type="text" class="form-control input-sm ng-valid ng-dirty searc_saleitem" placeholder="Search" ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">
+                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                  	<div class="btn-right" style="float:right ; margin:-58px 1px">
+                      <!--<input type="text" class="form-control input-sm ng-valid ng-dirty" placeholder="Search" ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">
+                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                      <span class="input-group-addon">Search</span>-->
+                  <!--</div>
+                </div>-->
+                
+                <button class="btn btn-success ur" data-toggle="modal" data-target="#create-user">نئی بنائیں</button>
+                <button class="btn btn-info ur" data-toggle="modal" data-target="#receive-item">آئیٹم وصولی</button>
+                </div>
+            <!--</div>-->
+            </div>            
+            <div class="card-content table-responsive">
+            	<table class="table table-bordered pagin-table table-urdu">
+                    <thead>
+                        <tr>
+                            <th>نمبر شمار</th>
+                            <th>نام</th>
+                            <th>سپلائر</th>
+                            <th>مقدار</th>
+                            <th>قیمت</th>
+                            <th>ایکشن</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="value in data | itemsPerPage:perpage" total-items="totalItems" ng-class="{black : value.quantity >= 10, red: value.quantity < 10}">
+                        <!--<tr>-->
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ value.name }}</td>
+                            <td>{{ value.supplier }}</td>
+                            <td>{{ value.quantity }}</td>
+                            <td>{{ value.price.toFixed(2) }}</td>
+                            <td>
+                            <button data-toggle="modal" ng-click="edit(value.id)" data-target="#edit-data" class="btn btn-sm btn-primary btn-urdu">ترمیم</button>
+                            <!--<button ng-click="remove(value,$index)" class="btn btn-danger">Delete</button>-->
+                            <button data-toggle="modal" ng-click="detail(value.id)" data-target="#detail" class=" btn btn-sm btn-primary btn-urdu">تفصیل</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    	
+                    </tfoot>
+                </table>
+                <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- Create Modal -->
+<div class="modal fade" id="create-user" role="dialog" aria-labelledby="myModalLabel" style="overflow:hidden;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="addItem" role="form" ng-submit="saveAdd()">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">نئی سیل آئٹم</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <div class="row">
+                    	<div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> سپلائر</label>
+                                <select ng-model="form.supplier" class="form-control select2" required>
+                                <option ng-repeat="s in supplier" value="{{s.id}}">{{s.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> قسم</label>
+                                <select ng-model="form.category" class="form-control select2" required>
+                                <option ng-repeat="c in category" value="{{c.id}}">{{c.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> نام</label>
+                                <input ng-model="form.name" type="text" placeholder="Name" name="name" class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> مقدار</label>
+                                <input type="text" ng-model="form.quantity" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> قیمت</label>
+                                <input type="text" ng-model="form.price" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> ان لوڈنگ</label>
+                                <input type="text" ng-model="form.off_loading" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="addItem.$invalid" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="edit-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="editItem" role="form" ng-submit="saveEdit()">
+                <input ng-model="form.id" type="hidden" placeholder="Name" name="name" class="form-control" />
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">سیل آئٹم تبدیلی</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> نام</label>
+                               <input ng-model="form.name" type="text" placeholder="Name" name="name" class="form-control" required />
+                            </div>
+                        </div>
+                        <!--<div class="col-md-12">
+                            <div class="form-group label-floating">
+                                <label class="control-label"> Quantity</label>
+                               <input type="text" ng-model="form.quantity" class="form-control" required>
+                            </div>
+                        </div>-->
+                        <div class="col-md-12">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> قیمت</label>
+                               <input type="text" ng-model="form.price" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="editItem.$invalid" class="btn btn-primary create-crud">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Received Item Modal -->
+<div class="modal fade" id="receive-item"  role="dialog" aria-labelledby="myModalLabel" style="overflow:hidden;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="receiveItem" role="form" ng-submit="saveReceiveItem()">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel">سیل آئیٹم وصولی</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <div class="row">
+                    	<div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> سپلائر</label>
+                                <select ng-model="form.supplier" class="form-control select2" required>
+                                <option ng-repeat="s in supplier" value="{{s.id}}">{{s.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> نام</label>
+                                <select ng-model="form.name" class="form-control select2" required>
+                                <option ng-repeat="x in all_items" value="{{x.id}}">{{x.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> قسم</label>
+                                <select ng-model="form.type" class="form-control urdu select2" required>
+                                <option ng-repeat="o in opts" value="{{o.value}}">{{o.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> مقدار</label>
+                                <input type="text" ng-model="form.quantity" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> قیمت</label>
+                                <input type="text" ng-model="form.price" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> ان لوڈنگ</label>
+                                <input type="text" ng-model="form.off_loading" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" ng-disabled="receiveItem.$invalid" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title urr" id="myModalLabel"> آئٹم تفصیل</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <div class="row">
+                    <table class="table table-urdu">
+                    	<th>آئٹم نام</th>
+                        <th> تاریخ</th>
+                        <th>قیمت</th>
+                        <th>مقدار</th>
+                        <th>ان لوڈنگ</th>
+                        <th>ٹوٹل</th>                        
+                        <th>ایکشن</th>
+                      <tr ng-repeat="x in detaildata" ng-class="{black : x.type == 'purchase', red: x.type == 'return'}">
+                        <td>{{ x.name }}</td>
+                        <td>{{ x.date }}</td>
+                        <td>{{ (x.price).toFixed(2) }}</td>
+                        <td>{{ x.quantity }}</td>
+                        <td>{{ x.off_loading }}</td>
+                        <td>{{ ((x.quantity*x.price) + (x.quantity*x.off_loading)).toFixed(2) }}</td>
+                        <td ng-if="x.date == todayDate">                            
+                                <span ng-if="x.deleted == 'yes'">
+                                    <button ng-click="correct(x,$index)" class="btn btn-sm btn-success btn-urdu">Correct</button>
+                                </span>
+                                <span ng-if="x.deleted == 'no'">
+                                    <button ng-click="remove_receive_item(x,$index)" class="btn btn-sm btn-danger btn-urdu">Delete</button>
+                                </span>
+                            </td>
+                            <td ng-if="value.date != todayDate">&nbsp;
+                         </td>
+                      </tr>
+                      <tr>
+                      	<td colspan="5"><strong>ٹوٹل</strong></td>
+                        <td><strong>{{(getTotal(detaildata)).toFixed(2)}}</strong></td>
+                      </tr>
+                    </table>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+	$(function () {			
+		$(".select2").select2();
+	});
+	</script>
