@@ -177,11 +177,11 @@ app.controller('SalesController', function(dataFactory,$scope,$http,site_url){
     $scope.choices.splice(lastItem);
   };
   
-  $scope.choices1 = [{id: 1,saleitem:'',purchase_price:0,saler:0,sale_price:0,qty:0,total:0,bachat:0,purchaser:0,purchaser_total:0,saler_total:0,bachat_total:0}];
+  $scope.choices1 = [{id: 1,saleitem:'',percentage_on_off:1,purchase_price:0,saler:0,sale_price:0,qty:0,total:0,bachat:0,purchaser:0,purchaser_total:0,saler_total:0,bachat_total:0}];
   $scope.addNewChoice1 = function() {
 	  
     var newItemNo = $scope.choices1.length+1;
-    $scope.choices1.push({id: newItemNo,saleitem:'',purchase_price:0,saler:0,sale_price:0,qty:0,total:0,bachat:0,purchaser:0,purchaser_total:0,saler_total:0,bachat_total:0});
+    $scope.choices1.push({id: newItemNo,saleitem:'',percentage_on_off:1,purchase_price:0,saler:0,sale_price:0,qty:0,total:0,bachat:0,purchaser:0,purchaser_total:0,saler_total:0,bachat_total:0});
 	$(".select2").select2();
   };
     

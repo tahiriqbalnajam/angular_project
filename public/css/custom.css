@@ -17,6 +17,9 @@
     font-family: noori;
     src: url(./noori/Jameel.ttf);
 }
+
+
+
 .panel-heading.login_header {
    background-color: #9c27b0;
   box-shadow: 0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0 rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2);
@@ -182,3 +185,68 @@ padding: 24px 24px 19px;
   top: 50%;
   width: 0;
 }*/
+
+.switch {
+  display: inline-block;
+  position: relative;
+  margin: 0 0 10px;
+  font-size: 16px;
+  line-height: 24px;
+}
+.switch__input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 20px;
+  opacity: 0;
+  z-index: 0;
+}
+.switch__label {
+  display: block;
+  padding: 0 0 0 44px;
+  cursor: pointer;
+}
+.switch__label:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 0;
+  width: 36px;
+  height: 14px;
+  background-color: rgba(0, 0, 0, 0.26);
+  border-radius: 14px;
+  z-index: 1;
+  -webkit-transition: background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.switch__label:after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  z-index: 2;
+  -webkit-transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition-property: left, background-color;
+  transition-property: left, background-color;
+}
+.switch__input:checked + .switch__label:before {
+  background-color: rgba(63, 81, 181, 0.5);
+}
+.switch__input:checked + .switch__label:after {
+  left: 16px;
+  background-color: #3f51b5;
+}
+.idl-card{
+ border: 1px solid #eee;
+padding: 10px 15px;
+margin-bottom: 10px;
+box-shadow: 0px 2px 5px #a23cb6;
+margin-right: 10px;
+}

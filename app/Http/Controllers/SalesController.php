@@ -304,7 +304,8 @@ class SalesController extends Controller
 						$item_id = $pre['saleitem'];				
 						$sale_item_ = Sale_items::find($pre['saleitem']);
 						$new_qty = $sale_item_['quantity'] - $pre['qty'];
-						$total_jama = $sale_item_['price'] * $pre['qty'];
+						//$total_jama = $sale_item_['price'] * $pre['qty'];
+						$total_jama = $pre['price'] * $pre['qty'];
 						DB::table('sale_items')->where('id', $pre['saleitem'])->update(['quantity' => $new_qty]);
 						
 						DB::table('sales_items')->insert([
@@ -354,16 +355,16 @@ class SalesController extends Controller
 							]
 							]);
 					}
-					DB::table('transection')->insert([
-						['account_id' => 6,
-						'amount' => $g_total - $grand_jama,
-						'type' => 'sale',
-						'detail' => 'Amount From Sale',
-						'payment_type' => 'jama',			
-						'date' => Session::get('todayDate'),
-						'sale_purchase_id' => $sale_id,
-						]
-						]);
+					// //DB::table('transection')->insert([
+					// 	['account_id' => 6,
+					// 	'amount' => $g_total - $grand_jama,
+					// 	'type' => 'sale',
+					// 	'detail' => 'Amount From Sale',
+					// 	'payment_type' => 'jama',			
+					// 	'date' => Session::get('todayDate'),
+					// 	'sale_purchase_id' => $sale_id,
+					// 	]
+					// 	]);
 					
 					//sms
 				$config = DB::table('config')->first();
@@ -472,7 +473,8 @@ class SalesController extends Controller
 					$item_id = $pre['saleitem'];				
 					$sale_item_ = Sale_items::find($pre['saleitem']);
 					$new_qty = $sale_item_['quantity'] - $pre['qty'];
-					$total_jama = $sale_item_['price'] * $pre['qty'];
+					$total_jama = $pre['price'] * $pre['qty'];
+					//$total_jama = $sale_item_['price'] * $pre['qty'];
 					DB::table('sale_items')->where('id', $pre['saleitem'])->update(['quantity' => $new_qty]);
 					
 					DB::table('sales_items')->insert([
@@ -522,16 +524,16 @@ class SalesController extends Controller
 						]
 						]);
 				}
-				DB::table('transection')->insert([
-					['account_id' => 6,
-					'amount' => $g_total - $grand_jama,
-					'type' => 'sale',
-					'detail' => 'Amount From Sale',
-					'payment_type' => 'jama',			
-					'date' => Session::get('todayDate'),
-					'sale_purchase_id' => $sale_id,
-					]
-					]);
+				// DB::table('transection')->insert([
+				// 	['account_id' => 6,
+				// 	'amount' => $g_total - $grand_jama,
+				// 	'type' => 'sale',
+				// 	'detail' => 'Amount From Sale',
+				// 	'payment_type' => 'jama',			
+				// 	'date' => Session::get('todayDate'),
+				// 	'sale_purchase_id' => $sale_id,
+				// 	]
+				// 	]);
 				
 				//sms
 				$config = DB::table('config')->first();
