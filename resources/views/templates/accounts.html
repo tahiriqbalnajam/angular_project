@@ -215,7 +215,7 @@
                         <div class="col-md-6">
                             <strong class="urdu-lable">اکائونٹ قسم : </strong>
                             <div class="form-group">
-                                <select ng-model="form.account_type" class="account_type urdu">
+                                <select ng-model="form.account_type" class="account_type urdu" required>
                                 <option ng-repeat="x in accountType" value="{{x.id}}">{{x.title}}</option>
                                 </select>
                             </div>
