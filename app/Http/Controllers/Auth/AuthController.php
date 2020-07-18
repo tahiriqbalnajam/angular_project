@@ -70,7 +70,10 @@ class AuthController extends Controller
 	public function login()
 	{
 		$zaki = explode(' ',exec('getmac'));
-		if(md5($zaki[0]) == '59f969b41d62428f5073edebe49d9450' ){
+		//t-d89be3b6a91c4230854e2746f05114c5
+		//n-59f969b41d62428f5073edebe49d9450
+
+		if(md5($zaki[0]) == 'd89be3b6a91c4230854e2746f05114c5' ){
 			// validate the info, create rules for the inputs
 		$rules = array(
 			'email'    => 'required|email', // make sure the email is an actual email
