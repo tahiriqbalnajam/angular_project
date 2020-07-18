@@ -214,10 +214,14 @@ $scope.getTotal = function(detaildata){
 	var percentage = 0;
     for(var i = 0; i < detaildata.length; i++){
         var product = detaildata[i];
-		if(product.intrest > 0){
-			//percentage = (product.price * product.quantity)*product.intrest / 100;
+		if(product.running_sale){
+			percentage = (product.price * product.quantity)+(product.price * product.quantity)*product.intrest / 100;
+			total += percentage;
 		}
-        total += (product.price * product.quantity)*( product.intrest/100)+(product.price * product.quantity);
+		else{
+			total += product.sale_price;
+		}
+        
     }
     return total;
 }
@@ -323,7 +327,17 @@ $scope.num_formate = function(value) {
 	return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 //////////////end total
-
+$scope.running_jama_total = function(price,qty,percenteage,id){
+	var value = 0;
+	if($('#percentage_on_off'+id).is(':checked')){
+		var total = price*qty;
+		var per = (total*percenteage)/100;
+		value = total+per;
+	}else{
+		value = percenteage*qty;
+	}
+    return value.toFixed(2);
+    }
 
 
 
