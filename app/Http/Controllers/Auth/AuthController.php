@@ -64,11 +64,14 @@ class AuthController extends Controller
 		
 	}
 	protected function showLoginForm(){
+		//die('sadf');
 		return View::make('auth.login');
 	}
 	public function login()
 	{
-		// validate the info, create rules for the inputs
+		$zaki = explode(' ',exec('getmac'));
+		if(md5($zaki[0]) == '59f969b41d62428f5073edebe49d9450' ){
+			// validate the info, create rules for the inputs
 		$rules = array(
 			'email'    => 'required|email', // make sure the email is an actual email
 			'password' => 'required|alphaNum|min:3' // password can only be alphanumeric and has to be greater than 3 characters
@@ -138,6 +141,11 @@ class AuthController extends Controller
 			}
 		
 		}
+		}
+		else{
+			return Redirect::to('login')->withErrors(['Sorry! You have not license for this machine']);
+		}
+		
 		
 	}
 

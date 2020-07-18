@@ -101,18 +101,18 @@
                         <th>قیمت</th>
                         <th>مقدار</th>
                         <!--<th>نقد/ادھار</th>-->
-                        <th>پرسنٹ</th>
+                        <!--<th>پرسنٹ</th>-->
                         <th>ٹوٹل</th>
                       <tr ng-repeat="x in detaildata">
                         <td>{{ x.name }}</td>
                         <td>{{ x.price }}</td>
                         <td>{{ x.quantity }}</td>
                         <!--<td>{{ x.payment_type }}</td>-->
-                        <td>{{ x.intrest }}</td>
-                        <td>{{ (x.quantity*x.price)*(x.intrest/100)+(x.quantity*x.price) }}</td>
+                        <!--<td>{{ x.intrest }}</td>-->
+                        <td><span ng-if="x.running_sale">{{(x.price*x.quantity)+((x.price*x.quantity)*x.intrest/100)}}</span><span ng-if="!x.running_sale">{{ x.sale_price}}</span></td>
                       </tr>
                       <tr>
-                      	<td colspan="4"><strong>ٹوٹل</strong></td>
+                      	<td colspan="3"><strong>ٹوٹل</strong></td>
                         <td><strong>{{getTotal(detaildata)}}</strong></td>
                       </tr>
                     </table>

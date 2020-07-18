@@ -130,19 +130,20 @@
                                     <div class="col-md-2">
                                         <div class="form-group label-floating">
                                             <label class="control-label urdu-lable"> جمع ٹوٹل</label>
-                                            <div>{{choice.saler_total = running_seller_total(qty_price_total(choice.purchase_price,choice.qty),((qty_price_total(choice.purchase_price,choice.qty))*integer(choice.saler)/100))}}</div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-1">
-                                        <div class="form-group label-floating">
-                                            <div class="switch">
-                                                
-                                                <input type="checkbox" id="percentage_on_off{{choice.id}}" class="switch__input" checked>
-                                                <label for="percentage_on_off{{choice.id}}" class="switch__label">% </label>
+                                            <div>{{choice.saler_total = running_seller_total(qty_price_total(choice.purchase_price,choice.qty),((qty_price_total(choice.purchase_price,choice.qty))*integer(choice.saler)/100))}}
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <!--<div class="col-md-1">
+                                        <div class="form-group label-floating">
+                                            <div class="switch">
+                                                
+                                                <input type="checkbox" ng-model="choice.percentage_on_off"  id="percentage_on_off{{choice.id}}" class="switch__input" ng-checked="true">
+                                                <label for="percentage_on_off{{choice.id}}" class="switch__label">% </label>
+                                            </div>
+                                        </div>
+                                    </div>-->
                                     
                                     <div class="col-md-1">
                                         <div class="form-group label-floating">
@@ -155,7 +156,8 @@
                                     <div class="col-md-2">
                                         <div class="form-group label-floating">
                                             <label class="control-label urdu-lable"> نام ٹوٹل</label>
-                                            <div>{{choice.purchaser_total = choice.qty*integer(choice.purchaser)}}</div>
+                                            <div>{{choice.purchaser_total = choice.qty*integer(choice.purchaser)}}
+                                            <!--{{choice.purchaser_total = running_jama_total(choice.purchase_price,choice.qty,choice.purchaser,choice.id)}}--></div>
                                         </div>
                                     </div>
                                     <div class="col-md-1">

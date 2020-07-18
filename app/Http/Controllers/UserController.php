@@ -134,8 +134,10 @@ class UserController extends Controller
     	$data = $request->all();
 		$input = array('name' => $data['name']
         		);
-		if(isset($data['password']))
+		if(isset($data['password'])){
 			$data['password'] = bcrypt($data['password']);
+			$input['password'] = $data['password'];
+		}
 
         User::where("id",$id)->update($input);		
         return response($data);

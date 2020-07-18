@@ -963,13 +963,14 @@ class SalesController extends Controller
 				$g_seller_total = 0;
 					$g_former_total = 0;
 					foreach($product as $pre){
+						
 						$sale_item_detail = Item::find($pre['saleitem']);
 						$detail_message .= 'Item:'.$sale_item_detail->title.', Qty:'.$pre['qty'].', Rate:'.$pre['sale_price'];						
 						//$seller_total = $pre['total']-$pre['bachat'];
 						//$g_seller_total = $g_seller_total+$seller_total;
 						$g_former_total = $g_former_total+$pre['purchaser_total'];
 					}
-					
+					//die();
 					DB::beginTransaction();
 
 					try {
