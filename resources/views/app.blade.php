@@ -69,6 +69,7 @@
     <script src="{{ asset('/app/controllers/UserController.js') }}"></script>
     <script src="{{ asset('/app/controllers/DirController.js') }}"></script>
     <script src="{{ asset('/app/controllers/AccountDetailController.js') }}"></script>
+    <script src="{{ asset('/app/controllers/ReportsController.js') }}"></script>
     
 <!--<style type="text/css">
 @font-face {

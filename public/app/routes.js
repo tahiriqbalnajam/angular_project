@@ -109,6 +109,10 @@ app.config(['$routeProvider',
 			when('/users', {
                 templateUrl: 'templates/user.html',
                 controller: 'UserController'
+            }).
+			when('/reports', {
+                templateUrl: 'templates/reports.html',
+                controller: 'ReportsController'
             });
 			
 }]);

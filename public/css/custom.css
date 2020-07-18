@@ -250,3 +250,7 @@ margin-bottom: 10px;
 box-shadow: 0px 2px 5px #a23cb6;
 margin-right: 10px;
 }
+.badge-secondary {
+	color: #fff !important;
+	background-color: #a6c !important;
+}

@@ -56,6 +56,8 @@ Route::group(array('middleware' => array('web','auth')), function () {
 	Route::resource('mallamad', 'MallamadController');
 	Route::resource('accounttype', 'AccountTypeController');
 	Route::resource('back_up', 'DirsController@back_up');
+	//////// reports
+	Route::resource('reports', 'ReportsController');
 	
 	Route::any('accounts_detail/{id}', 'AccountsController@accounts_detail');
 	
@@ -92,6 +94,12 @@ Route::group(array('middleware' => array('web','auth')), function () {
 	Route::any('product_detail/{id}', 'AccountsController@product_detail');
 	Route::any('ser_mall_detail', 'AccountsController@ser_mall_detail');
 	Route::any('ser_naqdi_detail', 'AccountsController@ser_naqdi_detail');
+	
+	//////// reports
+	Route::resource('reports', 'ReportsController');
+	//Route::any('reports/', 'ReportsController@get_items_detail');
+	//Route::any('transection_destroy/{id}', 'TransectionController@destroy');
+	//Route::any('transection_corroect/{id}', 'TransectionController@correct');
 	
 	//////////////    reports  ///////////
 	//Route::any('ser_naqdi_detail/{id}', 'AccountsController@ser_naqdi_detail');
