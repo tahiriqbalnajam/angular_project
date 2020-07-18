@@ -1,5 +1,0 @@
-
-
-ALTER TABLE `account_types` ADD `deleted` ENUM('no','yes') NOT NULL ; 
-ALTER TABLE `account_types` ADD `created_at` TIMESTAMP NOT NULL ; 
-ALTER TABLE `account_types` ADD `updated_at` TIMESTAMP NOT NULL ; 
