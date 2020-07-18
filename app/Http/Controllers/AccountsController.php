@@ -26,29 +26,18 @@ class AccountsController extends Controller
 		$data['perpage'] = 4000;
 		$data['config'] = DB::table('config')->first();
 		$data['account_type'] = Account_type::all();
-        if($request->get('search') && $request->get('account_type')){
-            $data['account'] = Account::where("name", "LIKE", "%{$request->get('search')}%")->orWhere("account_number", "LIKE", "%{$request->get('search')}%")
-				->where("account_type", "{$request->get('account_type')}")
-				->join('account_types', 'accounts.account_type', '=', 'account_types.id')->orderBy('accounts.name', 'asc')
-		  		->paginate($data['perpage'],['accounts.id AS id', 'accounts.*','account_types.id as typeid','account_types.title']);     
-        }
-		else if($request->get('search') && $request->get('account_type') == ''){
-            $data['account'] = Account::where("name", "LIKE", "%{$request->get('search')}%")->orWhere("account_number", "LIKE", "%{$request->get('search')}%")
-				->join('account_types', 'accounts.account_type', '=', 'account_types.id')->orderBy('accounts.name', 'asc')
-		  		->paginate($data['perpage'],['accounts.id AS id', 'accounts.*','account_types.id as typeid','account_types.title']);     
-        }
-		else if($request->get('account_type') && $request->get('search') == ''){
-			$acnt_type = ($request->get('account_type'))?$request->get('account_type'):'';
-            $data['account'] = Account::where("account_type","{$request->get('account_type')}")
-				->join('account_types', 'accounts.account_type', '=', 'account_types.id')->orderBy('accounts.name', 'asc')
-		  		->paginate($data['perpage'],['accounts.id AS id', 'accounts.*','account_types.id as typeid','account_types.title']);     
-        }
-		else{
-		  $data['account'] = Account::join('account_types', 'accounts.account_type', '=', 'account_types.id')->orderBy('accounts.name', 'asc')
-		  	->paginate($data['perpage'],['accounts.id AS id', 'accounts.*','account_types.id as typeid','account_types.title']);
-		  	//->get();
-        }
-		//echo $input['account_type'];
+
+		$account = Account::with('account_type');
+
+		if($request->get('search')) {
+			$account->where("name", "LIKE", "%{$request->get('search')}%")->orWhere("account_number", "LIKE", "%{$request->get('search')}%");
+		}
+		if($request->get('account_type')) {
+			$account->where("account_type", "{$request->get('account_type')}");
+		}
+
+		$data['account'] = $account->paginate($data['perpage']);
+
         return response($data);
     }
 
@@ -59,19 +48,14 @@ class AccountsController extends Controller
      */
 	 
     public function store(Request $request)
-    {
+    {	
+		$input = $request->all();
+		if($input['naam_jama'] == 'naam')
+			$input['opening_balance'] = $input['opening_balance']*-1;
 		
-    	$input = $request->all();
-	//
-	//echo $input['opening_balance'];
-	if($input['naam_jama'] == 'naam')
-	$input['opening_balance'] = $input['opening_balance']*-1;
-	//print_r($input);
-        $create = Account::create($input);
-		$create1 = Account::select('accounts.id AS id', 'accounts.*','account_types.id  as typeid','account_types.title')
-		->join('account_types', 'accounts.account_type', '=', 'account_types.id')
-		  		->where("accounts.id",$create->id)->first();
-        return response($create1);
+		$account = Account::create($input);
+		$account  = $account->with('account_type')->first();
+        return response($account, 200);
     }
 
     /**
@@ -95,12 +79,9 @@ class AccountsController extends Controller
     public function update(Request $request,$id)
     {
     	$input = $request->all();
-
-        Account::where("id",$id)->update($input);
-        //$account = Account::find($id);
-		$account = Account::select('accounts.id as id','accounts.name','accounts.phone','accounts.opening_balance','accounts.account_number','accounts.address','account_types.title','accounts.check_from','accounts.check_to')
-		->join('account_types', 'accounts.account_type', '=', 'account_types.id')
-		  		->where("accounts.id",$id)->first();
+		$account = Account::find($id);
+		$account->update($input);
+		$account = $account->with('account_type')->first();
         return response($account);
     }
 	public function closing(Request $request)
@@ -108,7 +89,7 @@ class AccountsController extends Controller
 		//echo $request->input('date');
 		//echo Session::get('todayDate');
 		$date = explode('/',$request->get('date'));
-			$new_date = $date[2].'-'.$date[1].'-'.$date[0];
+		$new_date = $date[2].'-'.$date[1].'-'.$date[0];
 		$res = DB::table('closing_date')->latest('id')->first();
 		$amount = DB::table('amount_in_hand')->where('date',Session::get('todayDate'))->first();
 		echo $jama = DB::table('transection')->where('payment_type','jama')->where('deleted','no')->where('date',Session::get('todayDate'))->whereNotIn( 'transection.type', array('receive_item','mall_rokkar'))->sum('transection.amount');		
@@ -127,217 +108,102 @@ class AccountsController extends Controller
 		//return response(array('di'=>'yes'));
 	}
 	public function accounts_detail($id)
-	{
+	{	
+
+		$account = new Account();
+
 		$data['account'] = $res_account = Account::find($id);
-					
-		$data['sales_items_detail'] = $sales_items_detail = DB::table('transection')->where('transection.account_id',$id)
-										->where('sales.deleted','no')
-										//->where('sales.sale_type','sale')
-										->where('transection.type','sale')
-										->where('transection.payment_type','naam')
-										->join('sales', 'sales.id', '=', 'transection.sale_purchase_id')
-										->join('accounts as a', 'a.id', '=', 'sales.account_id')
-										//->join('sales_items as si', 'si.sale_id', '=', 'sales.id')
-										//->join('sale_items as sa', 'sa.id', '=', 'si.item_id')
-										->get(array('sales.date','transection.amount','a.name'));
+		
+		/////////////////////////////////SALE DETAIL////////////////////////
+		$data['sales_items_detail'] = $sales_items_detail = $account->sale_detail($id, 'naam');
 		if($sales_items_detail){
 			$data['sales_items_detail'] = $sales_items_detail;
 		}
 		else{
 			$data['sales_items_detail'] = '';
 		}
-		$data['sales_items_detail_jama'] = $sales_items_detail_jama = DB::table('transection')->where('transection.account_id',$id)
-										->where('sales.deleted','no')
-										//->where('sales.sale_type','return')
-										->where('transection.type','sale')
-										->where('transection.payment_type','jama')
-										->join('sales', 'sales.id', '=', 'transection.sale_purchase_id')
-										->join('accounts as a', 'a.id', '=', 'sales.account_id')
-										->get(array('sales.date','transection.amount','a.name'));
-										//->join('sales_items as si', 'si.sale_id', '=', 'sales.id')
-										//->join('sale_items as sa', 'sa.id', '=', 'si.item_id')
-										//->get(array('sales.date','transection.amount','si.price','a.name','sa.name as item_name','si.purchase_price'));
+		$data['sales_items_detail_jama'] = $sales_items_detail_jama = $account->sale_detail($id, 'jama');
 		if($sales_items_detail_jama){
 			$data['sales_items_detail_jama'] = $sales_items_detail_jama;
 		}
 		else{
 			$data['sales_items_detail_jama'] = '';
 		}
-		$data['direct_sales_items_detail'] = $direct_sales_items_detail = DB::table('transection')->where('transection.account_id',$id)
-										->where('running_sale_items.deleted','no')
-										//->where('sales.sale_type','sale')
-										->where('transection.type','direct_sale')
-										->where('transection.deleted','no')
-										->where('transection.payment_type','naam')
-										->join('running_sale_items', 'running_sale_items.sale_id', '=', 'transection.sale_purchase_id')
-										->join('items as i', 'i.id', '=', 'running_sale_items.item_id')
-										//->join('running_sale_items as si', 'si.sale_id', '=', 'sales.id')
-										//->join('items as sa', 'sa.id', '=', 'si.item_id')
-										->groupBy('running_sale_items.id')
-										->get(array('running_sale_items.date','running_sale_items.price','running_sale_items.sale_price as amount','running_sale_items.quantity','running_sale_items.purchaser_percentage','i.title'));
+
+		////////////////////////////DIRECT SALE/////////////////////////
+		$data['direct_sales_items_detail'] = $direct_sales_items_detail = $account->direct_sale_naam($id, 'naam');
 		if($direct_sales_items_detail){
 			$data['direct_sales_items_detail'] = $direct_sales_items_detail;
 		}
 		else{
 			$data['direct_sales_items_detail'] = '';
 		}
-		//DB::enableQueryLog(); // Enable query log
 
-// Your Eloquent query executed by using get()
-
-if($id == 6){
-	$data['direct_sales_items_detail_jama'] = $direct_sales_items_detail_jama = DB::table('transection')->select('transection.date','transection.amount')
-										->where('transection.account_id',$id)
-										//->where('running_sale_items.deleted','no')
-										//->where('sales.sale_type','sale')
-										->where('transection.type','direct_sale')
-										->where('transection.payment_type','jama')
-										->where('transection.deleted','no')
-										//->join('running_sale_items', function ($join){
-										//	$join->on('running_sale_items.sale_id', '=', 'transection.sale_purchase_id');
-										//	$join->on('running_sale_items.seller_id', '=', 'transection.account_id');
-										//})
-										
-										//->join('running_sale_items', 'running_sale_items.seller_id', '=', 'transection.account_id')
-										//->join('items as i', 'i.id', '=', 'running_sale_items.item_id')
-										//->join('running_sale_items as si', 'si.sale_id', '=', 'sales.id')
-										//->join('items as sa', 'sa.id', '=', 'si.item_id')
-										//->groupBy('running_sale_items.id')
-										->get();
-										//dd(DB::getQueryLog()); 
-										
-		if($direct_sales_items_detail_jama){
-			$data['direct_sales_items_detail_jama'] = $direct_sales_items_detail_jama;
+		if($id == 6){
+			$data['direct_sales_items_detail_jama'] = $direct_sales_items_detail_jama = DB::table('transection')->select('transection.date','transection.amount')
+												->where('transection.account_id',$id)
+												->where('transection.type','direct_sale')
+												->where('transection.payment_type','jama')
+												->where('transection.deleted','no')
+												->get();
+												//dd(DB::getQueryLog()); 
+												
+				if($direct_sales_items_detail_jama){
+					$data['direct_sales_items_detail_jama'] = $direct_sales_items_detail_jama;
+				}
+				else{
+					$data['direct_sales_items_detail_jama'] = '';
+				}
+		}else{
+			$data['direct_sales_items_detail_jama'] = $direct_sales_items_detail_jama = $account->direct_sale_jama($id);
+												
+				if($direct_sales_items_detail_jama){
+					$data['direct_sales_items_detail_jama'] = $direct_sales_items_detail_jama;
+				}
+				else{
+					$data['direct_sales_items_detail_jama'] = '';
+				}
 		}
-		else{
-			$data['direct_sales_items_detail_jama'] = '';
-		}
-}else{
-	$data['direct_sales_items_detail_jama'] = $direct_sales_items_detail_jama = DB::table('transection')->select('running_sale_items.date','running_sale_items.price','running_sale_items.purchase_price as amount','running_sale_items.quantity','running_sale_items.saler_percentage','i.title')
-										->where('transection.account_id',$id)
-										->where('running_sale_items.deleted','no')
-										//->where('sales.sale_type','sale')
-										->where('transection.type','direct_sale')
-										->where('transection.deleted','no')
-										->where('transection.payment_type','jama')
-										->join('running_sale_items', function ($join){
-											$join->on('running_sale_items.sale_id', '=', 'transection.sale_purchase_id');
-											$join->on('running_sale_items.seller_id', '=', 'transection.account_id');
-										})
-										
-										//->join('running_sale_items', 'running_sale_items.seller_id', '=', 'transection.account_id')
-										->join('items as i', 'i.id', '=', 'running_sale_items.item_id')
-										//->join('running_sale_items as si', 'si.sale_id', '=', 'sales.id')
-										//->join('items as sa', 'sa.id', '=', 'si.item_id')
-										->groupBy('running_sale_items.id')
-										->get();
-										//dd(DB::getQueryLog()); 
-										
-		if($direct_sales_items_detail_jama){
-			$data['direct_sales_items_detail_jama'] = $direct_sales_items_detail_jama;
-		}
-		else{
-			$data['direct_sales_items_detail_jama'] = '';
-		}
-}
-		/*$data['direct_sales_items_detail_jama'] = $direct_sales_items_detail_jama = DB::table('transection')->select('running_sale_items.date','running_sale_items.price','transection.amount','running_sale_items.quantity','i.title')
-										->where('transection.account_id',$id)
-										->where('running_sale_items.deleted','no')
-										//->where('sales.sale_type','sale')
-										->where('transection.type','direct_sale')
-										->where('transection.payment_type','jama')
-										->join('running_sale_items', function ($join){
-											$join->on('running_sale_items.sale_id', '=', 'transection.sale_purchase_id');
-											$join->on('running_sale_items.seller_id', '=', 'transection.account_id');
-										})
-										
-										//->join('running_sale_items', 'running_sale_items.seller_id', '=', 'transection.account_id')
-										->join('items as i', 'i.id', '=', 'running_sale_items.item_id')
-										//->join('running_sale_items as si', 'si.sale_id', '=', 'sales.id')
-										//->join('items as sa', 'sa.id', '=', 'si.item_id')
-										->groupBy('running_sale_items.id')
-										->get();
-										//dd(DB::getQueryLog()); 
-										
-		if($direct_sales_items_detail_jama){
-			$data['direct_sales_items_detail_jama'] = $direct_sales_items_detail_jama;
-		}
-		else{
-			$data['direct_sales_items_detail_jama'] = '';
-		}*/
 		
-				
-		$data['mall_roakker_detail'] =$mall_roakker_detail= DB::table('transection')->where('account_id',$id)->where('transection.type','mall_rokkar')
-										->where('transection.payment_type','naam')
-										->where('m.deleted','no')
-										->join('mallroakker as m', 'm.id', '=', 'transection.sale_purchase_id')
-										->join('accounts as a', 'a.id', '=', 'transection.account_id')
-										->join('items as i', 'i.id', '=', 'm.item_id')
-										->get(array('m.seller_id','transection.amount','m.rate','m.weight','m.arhat','m.date','i.title','a.name'));
+		//////////////////////////////////////MAAL ROKAR///////////////////////////
+		$data['mall_roakker_detail'] =$mall_roakker_detail= $account->mallrokar($id, 'naam');
 		if($mall_roakker_detail){
 			$data['mall_roakker_detail'] =$mall_roakker_detail;
 		}
 		else{$data['mall_roakker_detail'] = '' ;}
-		$data['mall_roakker_detail_jama'] =$mall_roakker_detail_jama= DB::table('transection')->where('account_id',$id)->where('transection.type','mall_rokkar')
-										->where('transection.payment_type','jama')
-										->where('m.deleted','no')
-										->join('mallroakker as m', 'm.id', '=', 'transection.sale_purchase_id')
-										->join('accounts as a', 'a.id', '=', 'transection.account_id')
-										->join('items as i', 'i.id', '=', 'm.item_id')
-										->get(array('m.seller_id','transection.amount','m.rate','m.weight','m.arhat','m.chong_amount','m.date','i.title','a.name'));
-										//return response(array('id',DB::getQueryLog()));
+		$data['mall_roakker_detail_jama'] =$mall_roakker_detail_jama= $account->mallrokar($id, 'jama');
 		if($mall_roakker_detail_jama){
 			$data['mall_roakker_detail_jama'] =$mall_roakker_detail_jama;
 		}
 		else{
 			$data['mall_roakker_detail_jama'] = '';
 		}
-        $data['transection_detail_jama'] = $transection_detail_jama = DB::table('transection')->where('account_id',$id)
-										->where('transection.deleted','no')
-										->where('transection.type','')
-										->where('transection.payment_type','jama')
-										->join('accounts as a', 'a.id', '=', 'transection.account_id')
-										->get(array('transection.amount','transection.detail','transection.date','a.name'));
-		if($transection_detail_jama){
-			$data['transection_detail_jama'] = $transection_detail_jama;
-		}
-		else{
-			$data['transection_detail_jama'] = '';
-		}
-		$data['transection_detail_naam'] = $transection_detail_naam = DB::table('transection')->where('account_id',$id)
-										->where('transection.deleted','no')
-										->where('transection.type','')
-										->where('transection.payment_type','naam')
-										->join('accounts as a', 'a.id', '=', 'transection.account_id')
-										->get(array('transection.amount','transection.detail','transection.date','a.name'));
+
+		////////////////////////////////NAQDI ROKAR/////////////////////////////
+		$data['transection_detail_naam'] = $transection_detail_naam = $account->naqdi($id, 'naam');
 		if($transection_detail_naam){
 			$data['transection_detail_naam'] = $transection_detail_naam;
 		}
 		else{
 			$data['transection_detail_naam'] = '';
 		}
-		$data['transection_detail_receive_naam'] = $transection_detail_receive_naam = DB::table('transection')->where('account_id',$id)
-										->where('transection.deleted','no')
-										->where('transection.type','receive_item')
-										->where('transection.payment_type','naam')
-										->join('accounts as a', 'a.id', '=', 'transection.account_id')
-										->join('sale_items_received as sr', 'sr.id', '=', 'transection.sale_purchase_id')
-										->join('sale_items as s', 's.id', '=', 'sr.item_id')
-										->get(array('transection.amount','transection.detail','transection.date','a.name','s.name as item_name','sr.price','sr.quantity'));
+        $data['transection_detail_jama'] = $transection_detail_jama = $account->naqdi($id, 'jama');
+		if($transection_detail_jama){
+			$data['transection_detail_jama'] = $transection_detail_jama;
+		}
+		else{
+			$data['transection_detail_jama'] = '';
+		}
+		
+		////////////////////////////////RECEIVED ITEMS//////////////////////////////
+		$data['transection_detail_receive_naam'] = $transection_detail_receive_naam = $account->received_items($id, 'naam');
 		if($transection_detail_receive_naam){
 			$data['transection_detail_receive_naam'] = $transection_detail_receive_naam;
 		}
 		else{
 			$data['transection_detail_receive_naam'] = '';
 		}
-		$data['transection_detail_receive_jama'] =$transection_detail_receive_jama = DB::table('transection')->where('account_id',$id)
-										->where('transection.deleted','no')
-										->where('transection.type','receive_item')
-										->where('transection.payment_type','jama')
-										->join('accounts as a', 'a.id', '=', 'transection.account_id')
-										->join('sale_items_received as sr', 'sr.id', '=', 'transection.sale_purchase_id')
-										->join('sale_items as s', 's.id', '=', 'sr.item_id')
-										->get(array('transection.amount','transection.detail','transection.date','a.name','s.name as item_name','sr.price','sr.quantity'));
+		$data['transection_detail_receive_jama'] =$transection_detail_receive_jama = $account->received_items($id, 'jama');
 		if($transection_detail_receive_jama){
 			$data['transection_detail_receive_jama'] =$transection_detail_receive_jama;
 		}

@@ -10,4 +10,5 @@ class Account_type extends Model
 
     public $fillable = ['title','deleted'];
 
+
 }
