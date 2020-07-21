@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Item;
 use App\Account;
 use App\Account_type;
+use App\Sale_items;
+use App\Reports;
+use App\Running_sale_items;
 use Validator;
 use Auth;
 
@@ -23,9 +26,41 @@ class ReportsController extends Controller
      */
     public function index(Request $request)
     {
-        $data['accounts'] = Account::with('account_type')->get();
+        $data['items'] = Item::get();
+		$data['sale_items'] = Sale_items::get();
+		
+		$date = ($request->get('date'))?$request->get('date'):'';
+		$items_id = ($request->get('item_id'))?$request->get('item_id'):'';
+		if($date){
+			$new_date = explode(' - ',$date);
+			$start_date = $this->date_change($new_date[0]);
+			$end_date = $this->date_change($new_date[1]);
+		}
+		else{
+			$start_date = date('Y-m-d');
+			$end_date = date('Y-m-d');
+		}
+		
+		if($items_id) {
+			$data['item_detail'] = Item::with(array('running_sale_items' => function($query) use ($start_date,$end_date){
+																		$query->whereBetween('date', [$start_date, $end_date])
+																			->where('deleted','no');
+																		}))->where('id',$items_id)->paginate(4000);
+		}
+		
+		
+		/*$reports = new Reports();
+		
+		if($items_id)
+			$data['items_detail'] = $reports->get_direct_item_detail($start_date,$end_date,$items_id);*/
+			
 		return response($data);
     }
+	function date_change($date)
+	{
+		$new_date = explode('/',$date);
+		return $new_date[2].'-'.$new_date[1].'-'.$new_date[0];
+	}
 
     /**
      * Store a newly created resource in storage.

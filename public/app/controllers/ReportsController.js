@@ -20,18 +20,53 @@ app.controller('ReportsController', function(dataFactory,$scope,$http,site_url){
 			if($.isEmptyObject($scope.selectAccount)){
 		  	$scope.selectAccount = '';
 			}
-          dataFactory.httpRequest(site_url+'/reports?search='+$scope.searchText+'&account_type='+$scope.selectAccount+'&page='+pageNumber).then(function(data) {
-            $scope.data = data.account.data;
-			$scope.accountType = data.account_type;
-            $scope.totalItems = data.account.total;
+          dataFactory.httpRequest(site_url+'/reports?date='+$scope.date+'&item_id='+$scope.item_id+'&page='+pageNumber).then(function(data) {
+			  $scope.items = data.items;
+			  $scope.sale_items = data.sale_items;
+			  $scope.items_detail = data.items_detail;
           });
       }else{
         dataFactory.httpRequest(site_url+'/reports?page='+pageNumber).then(function(data) {
-          $scope.all_accounts = data.accounts;		  
+          $scope.items = data.items;
+		  $scope.sale_items = data.sale_items;
           //$scope.totalItems = data.user.total;
         });
       }
   }
+  /////////////// direct sale totals
+  $scope.qty_total = function(data){
+    	var total = 0;
+   	 	for(var i = 0; i < data.length; i++){
+        	var product = data[i];
+        	total += (product.quantity);
+    	}
+    	return total.toFixed(2);
+	}
+	$scope.sale_price_total = function(data){
+    	var total = 0;
+   	 	for(var i = 0; i < data.length; i++){
+        	var product = data[i];
+        	total += (product.price);
+    	}
+    	return total.toFixed(2);
+	}
+	$scope.purchase_pirce_total = function(data){
+    	var total = 0;
+   	 	for(var i = 0; i < data.length; i++){
+        	var product = data[i];
+        	total += (product.purchaser_percentage);
+    	}
+    	return total.toFixed(2);
+	}
+	$scope.bachat_total = function(data){
+    	var total = 0;
+   	 	for(var i = 0; i < data.length; i++){
+        	var product = data[i];
+        	total += (product.purchaser_percentage-product.price);
+    	}
+    	return total.toFixed(2);
+	}
+  /////////////// end of direct sale totals
 
   $scope.searchDB = function(){
       if($scope.searchText.length >= 3){
@@ -95,7 +130,6 @@ app.controller('ReportsController', function(dataFactory,$scope,$http,site_url){
   //filter start 
   $scope.filter_form = function(){
 	  if($.isEmptyObject($scope.libraryTemp)){
-		  alert('sadf');
               $scope.libraryTemp = $scope;
 			  console.log($scope.libraryTemp);
               $scope.totalItemsTemp = $scope.totalItems;

@@ -11,8 +11,8 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header" data-background-color="purple">
-                <h4 class="title urr">روپورٹس روکڑ</h4>
-                <p class="category urr">یہاں نقدی روکٹ مینیج کریں</p>
+                <h4 class="title urr">ڈائریکٹ سیل روپورٹ</h4>
+                <p class="category urr"></p>
                 <!--<div class="pull-right" style="padding-top:30px">
                 <div class="box-tools" style="display:inline-table">
                   <div class="input-group">-->
@@ -21,7 +21,7 @@
                       <!--<span class="input-group-addon">Search</span>-->
                   <!--</div>
                 </div>-->
-                <a class="btn btn-success ur" href="#/add_transection"> نئی انٹری</a>
+                <!--<a class="btn btn-success ur" href="#/add_transection"> نئی انٹری</a>-->
                 </div>
             <!--</div>-->
             </div>
@@ -34,9 +34,9 @@
                 </div>
                 <div class="col-md-3">
                 	<div style=" margin-top: 15px;">                		
-                        <select ng-model="selectAccount" class="form-control select2 urdu" >
-                        	<option value="">سیلیکٹ کھاتہ</option>
-                        	<option ng-repeat="x in all_accounts" value="{{x.id}}">{{x.name}} ({{x.account_number}})</option>
+                        <select ng-model="item_id" class="form-control select2 urdu" required>
+                        	<option value="">سیلیکٹ </option>
+                        	<option ng-repeat="x in items" value="{{x.id}}">{{x.title}} </option>
                         </select>
                     </div>
                 </div>
@@ -48,111 +48,49 @@
                 </form>
             </div> 
             <div class="row">
-            <h4 style="padding-left: 20px;" class="urr"> اماءونٹ ان ہینڈ: {{ amountInHand }} </h4>  
-            	<div class="col-md-6">
-                <h3 align="center" class="urr"> جمع</h3>
+            	<div class="col-md-12">
+                <h3 align="center" class="urr"> جمع {{items_detail.data[0].title}}</h3>
                          
                     <div class="card-content table-responsive">
                         <table class="table table-bordered pagin-table table-urdu">
                             <thead>
                                 <tr>
-                                	<th>آئ ڈی</th>
+                                	<!--<th>#</th>-->
                                     <th>نام</th>
-                                    <th>رقم</th>
-                                    <th>تفصیل</th>
+                                    <th>مقدار</th>
+                                    <th>قیمت خرید</th>
+                                    <th>قیمت فروخت</th>
+                                    <th>بچت</th>
                                     <th>تاریخ</th>
-                                    <th>ایکشن</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr dir-paginate="value in transection_jama | itemsPerPage:5000" total-items="totalItems2" ng-class="{black : value.deleted == 'no', red: value.deleted == 'yes'}">                                   
-                                    <td>{{ value.sale_purchase_id }}</td>
-                                    <td >{{ value.name }}</td>
-                                    <td>{{ (value.amount).toFixed(2) }}</td>
-                                    <td>{{ value.detail }}</td>
+                                <tr dir-paginate="value in items_detail.data.running_sale_items | itemsPerPage:5000" total-items="totalItems2" ng-class="{black : value.deleted == 'no', red: value.deleted == 'yes'}">                                   
+                                    <!--<td>{{ value.id }}</td>-->
+                                    <td >{{ value.title }}</td>
+                                    <td>{{  value.quantity }}</td>
+                                    <td>{{ (value.price).toFixed(2) }}</td>
+                                    <td>{{ (value.purchaser_percentage).toFixed(2) }}</td>
+                                    <td>{{ (value.purchaser_percentage).toFixed(2)- (value.price).toFixed(2) }}</td>
                                     <td>{{ value.date }}</td>
-                                    <td ng-if="value.date == todayDate">
-                                    <span ng-if="value.sale_purchase_id">
-                                    	&nbsp;
-                                    </span>
-                                    <span ng-if="value.sale_purchase_id == 0">
-                                        <span ng-if="value.deleted == 'yes'">
-                                            <button ng-click="correct(value,$index)" class="btn-success">Correct</button>
-                                        </span>
-                                        <span ng-if="value.deleted == 'no'">
-                                            <button ng-click="remove(value,$index)" class="btn-danger">Delete</button>
-                                        </span>
-                                    </span>
-                                    </td>
-                                    <td ng-if="value.date != todayDate">&nbsp;
-                                    </td>
-                                    <!--<td>
-                                    <a class="btn btn-success" href="#/mallrokkar_edit" ng-click="edit(value.id)"> Edit</a>
-                                    <!--<button data-toggle="modal" ng-click="edit(value.id)" data-target="#edit-data" class="btn btn-primary">Edit</button>--
-                                    <button ng-click="remove(value,$index)" class="btn btn-danger">Delete</button>
-                                    </td>-->
+                                    
                                 </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
                                 	<td><strong>ٹوٹل</strong></td>
-                                    <td colspan="4"><strong>{{total_jama = saleTotal(transection_jama)}}</strong></td>
+                                    <td><strong>{{qty_total(items_detail)}}</strong></td>
+                                    <td><strong>{{sale_price_total(items_detail)}}</strong></td>
+                                    <td><strong>{{purchase_pirce_total(items_detail)}}</strong></td>
+                                    <td><strong>{{bachat_total(items_detail)}}</strong></td>
+                                    <td></td>
                                 </tr>
                             </tfoot>
                         </table>
                         
                     </div>
                  </div>
-                 <div class="col-md-6">
-                 <h3 align="center" class="urr">نام</h3>
-                 	<div class="card-content table-responsive">
-                        <table class="table table-bordered pagin-table table-urdu">
-                            <thead>
-                                <tr>
-                                	<th>آئ ڈی</th>                         
-                                    <th>نام</th>                                    
-                                    <th>رقم</th>
-                                    <th>تفصیل</th>
-                                    <th>تاریخ</th>
-                                    <th>ایکشن</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr dir-paginate="value1 in transection_naam | itemsPerPage:5000" total-items="totalItems1" ng-class="{black : value1.deleted == 'no', red: value1.deleted == 'yes'}">                                    
-                                    <td>{{ value1.sale_purchase_id }}</td>
-                                    <td>{{ value1.name }}</td>
-                                    <td>{{ (value1.amount).toFixed(2) }}</td>
-                                    <td>{{ value1.detail }}</td>
-                                    <td>{{ value1.date }}</td>
-                                    <td ng-if="value1.date == todayDate">
-                                    <span ng-if="value1.sale_purchase_id">
-                                    	&nbsp;
-                                    </span>
-                                    <span ng-if="value1.sale_purchase_id == 0">
-                                        <span ng-if="value1.deleted == 'yes'">
-                                            <button ng-click="correct(value1,$index)" class="btn-success">Correct</button>
-                                        </span>
-                                        <span ng-if="value1.deleted == 'no'">
-                                            <button ng-click="remove(value1,$index)" class="btn-danger">Delete</button>
-                                        </span>
-                                    </span>
-                                    </td>
-                                    <td ng-if="value1.date != todayDate">&nbsp;
-                                    
-                                    </td>    
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                	<td><strong>ٹوٹل</strong></td>
-                                    <td colspan="4"><strong>{{total_naam = saleTotal(transection_naam)}}</strong></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                       <strong class="urdu-lable">بیلنس</strong> {{ (parseFloat(total_jama) + parseFloat(amountInHand) - parseFloat(total_naam)).toFixed(2) }}
-                        <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
-                    </div>
-                 </div>
+                 
              </div>
         </div>
     </div>
@@ -323,7 +261,7 @@ $('.date-picker').datepicker( {
 	format: 'dd/mm/yyyy',        
     });
 		$('.date_range').daterangepicker({
-			autoUpdateInput: false,
+			autoUpdateInput: true,
 			locale: {
 				format: 'DD/MM/YYYY'
 			}
