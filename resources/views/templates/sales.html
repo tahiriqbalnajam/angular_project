@@ -41,6 +41,7 @@
                             <th>نام</th>
                             <th>رقم</th>
                             <th>تاریخ</th>
+                            <th>سیل قسم</th>
                             <th>ایکشن</th>
                         </tr>
                     </thead>
@@ -51,6 +52,14 @@
                             <td>{{ value.name }}</td>
                             <td>{{ (value.amount).toFixed(2) }}</td>
                             <td>{{ value.date }}</td>
+                            <td>
+                            	<span ng-if="value.sale_type == 'sale'">
+                                	Sale
+                                </span>
+                                <span ng-if="value.sale_type == 'return'">
+                                	Return
+                                </span>
+                            </td>
                             <td ng-if="value.date == todayDate">
                             <span ng-if="value.sale_type == 'sale'">
                                 <span ng-if="value.deleted == 'yes'">
@@ -62,8 +71,13 @@
                                 </span>
                             </span>
                             <span ng-if="value.sale_type == 'return'">
-                            	Return
+                            	<span ng-if="value.deleted == 'yes'">
+                                <button ng-click="edit(value.id)" class="btn-success">Correct</button>
+                                </span>
+                                <span ng-if="value.deleted == 'no'">
+                                <button ng-click="remove(value,$index)" class="btn-danger">Delete</button>
                                 <button data-toggle="modal" ng-click="detail(value.id,value.running_sale)" data-target="#edit-data" class="btn-warning">detail</button>
+                                </span>
                             </span>
                             </td>
                             <td ng-if="value.date != todayDate">&nbsp;

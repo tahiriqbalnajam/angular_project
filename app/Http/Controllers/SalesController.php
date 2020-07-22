@@ -145,7 +145,7 @@ class SalesController extends Controller
 			$tttlll += $cash_total;
 			$sale_item_ = Sale_items::find($pre['saleitem']);
 			$new_qty = $sale_item_['quantity'] + $pre['qty'];
-			$total_jama = $sale_item_['price'] * $pre['qty'];
+			$total_jama = $pre['price'] * $pre['qty'];
 			DB::table('sale_items')->where('id', $pre['saleitem'])->update(['quantity' => $new_qty]);			
 				DB::table('sales_items')->insert([
 				['quantity' => $pre['qty'],
@@ -194,7 +194,7 @@ class SalesController extends Controller
 						]
 						]);
 				}
-			DB::table('transection')->insert([
+			/*DB::table('transection')->insert([
 				['account_id' => 6,
 				'amount' => $g_total - $grand_jama,
 				'type' => 'sale',
@@ -203,7 +203,7 @@ class SalesController extends Controller
 				'date' => Session::get('todayDate'),
 				'sale_purchase_id' => $sale_id,
 				]
-				]);
+				]);*/
 			
 			//sms
 			$config = DB::table('config')->first();
@@ -614,10 +614,16 @@ class SalesController extends Controller
 		DB::table('sales_items')->where('sale_id', $id)->update(['deleted' => 'no']);
 		DB::table('sales')->where('id', $id)->update(['deleted' => 'no']);
         $sales_items = DB::select("SELECT * FROM sales_items WHERE sale_id = $id ");
+		$saless = Sales::find($id);
 		foreach($sales_items as $row){
 			$item_id = $row->item_id;				
 			$sale_item_ = Sale_items::find($row->item_id);
-			$new_qty = $sale_item_['quantity'] - $row->quantity;
+			if($saless->sale_type == 'return'){
+				$new_qty = $sale_item_['quantity'] + $row->quantity;
+			}
+			else{
+				$new_qty = $sale_item_['quantity'] - $row->quantity;
+			}
 			DB::table('sale_items')->where('id', $row->item_id)->update(['quantity' => $new_qty]);
 			/*$qty_result = DB::select("SELECT * FROM `sale_items_received` WHERE item_id = $item_id and quantity != qty_sold order by id ");
 			$sold_qty = $row->quantity;
@@ -667,10 +673,17 @@ class SalesController extends Controller
 		DB::table('transection')->where('sale_purchase_id', $id)->where('type', 'direct_sale')->update(['deleted' => 'yes']);
 		DB::table('sales_items')->where('sale_id', $id)->update(['deleted' => 'yes']);
 		DB::table('sales')->where('id', $id)->update(['deleted' => 'yes']);
+		$saless = Sales::find($id);
 		$sales_items = DB::select("SELECT * FROM sales_items WHERE sale_id = $id ");
 		foreach($sales_items as $row){
 			$sale_item_ = Sale_items::find($row->item_id);
-			$new_qty = $sale_item_['quantity'] + $row->quantity;
+			if($saless->sale_type == 'return'){
+				$new_qty = $sale_item_['quantity'] - $row->quantity;
+			}
+			else{
+				$new_qty = $sale_item_['quantity'] + $row->quantity;
+			}
+			
 			DB::table('sale_items')->where('id', $row->item_id)->update(['quantity' => $new_qty]);
 			/*$qty_result = DB::select("SELECT * FROM `sale_items_received` WHERE item_id = ".$row->item_id." and qty_sold != 0 order by id desc ");
 			$qty_delet = $row->quantity;
@@ -1090,6 +1103,9 @@ class SalesController extends Controller
 		$total_naam = 0;
 		$total_jama = 0;
 		$total_balance = 0;
+		$opening_balance = 0;
+		$data['test']=$account = Account::find($id);
+		$opening_balance = $account->opening_balance;
 		foreach($naam_jama_detail as $row){
 			$total_naam += $row->naam_amount;
 			$total_jama += $row->jama_amount;
@@ -1097,6 +1113,7 @@ class SalesController extends Controller
 			$data['total_naam'] = $total_naam;
 			$data['total_jama'] = $total_jama;
 			$balance = $total_jama-$total_naam;
+			$balance = $opening_balance+$balance;
 			if($balance<0){
 				$data['total_balance'] = round(($balance*-1),2).' نام';
 			}
