@@ -26,6 +26,7 @@
             <div class="card-content">
             <form method="POST" name="addItem" role="form" ng-submit="">            
                 <div class="row">
+                	<div class="col-md-12">
                     	<div class="row">
                         	<div class="col-md-3">
                                 <div class="form-group label-floating">
@@ -108,7 +109,7 @@
                                 <div class="form-group label-floating">
                                     <label class="control-label urdu-lable">  پرسنٹ</label>
                                     <input type="text" id="intrest" ng-model="choice.intrest"  class="form-control" required="required">
-                                    <input type="hidden" ng-model="choice.payment_type" value="credit" required="required">
+                                    <input type="hidden" ng-model="choice.payment_type" value="credit" >
                                 </div>
                              </div>
                                 <div class="col-md-1">
@@ -118,12 +119,18 @@
                                 </div>
                             </div>                    
                         </div>
-                         ٹوٹل : {{getRunningTotal(0)}} 
-                </div>
+                         ٹوٹل : <span class="badge badge-secondary">{{getRunningTotal(0)}}</span>
+                         <br/>
+                         <button class="btn btn-info" ng-click="addNewChoice()">Add fields</button>
+                <div class="pull-right">
                     <button type="submit" ng-disabled="addItem.$invalid" class="btn btn-primary" ng-click="saveAdd()">Submit</button>
+                    </div> 
+                </div>
+                
+           </div>
             </form>
             
-				   <button class="btn btn-info" ng-click="addNewChoice()">Add fields</button>
+				   
             </div>                        
         </div>
     </div>

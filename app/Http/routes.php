@@ -77,6 +77,7 @@ Route::group(array('middleware' => array('web','auth')), function () {
 	//Route::any('sales_detail/{id}', 'SaleitemsController@sales_detail');
 	Route::any('sales_detail', 'SaleitemsController@sales_detail');
 	Route::any('direct_sales', 'SalesController@direct_sales');
+	Route::any('combine_sales', 'SalesController@combine_sales');
 	Route::any('remove_receive_item/{id}', 'SaleitemsController@remove_receive_item');
 	Route::any('saleitemsFirst', 'SaleitemsController@saleitemsFirst');
 	

@@ -41,18 +41,18 @@ class ReportsController extends Controller
 			$end_date = date('Y-m-d');
 		}
 		
-		if($items_id) {
+		/*if($items_id) {
 			$data['item_detail'] = Item::with(array('running_sale_items' => function($query) use ($start_date,$end_date){
 																		$query->whereBetween('date', [$start_date, $end_date])
 																			->where('deleted','no');
 																		}))->where('id',$items_id)->paginate(4000);
-		}
+		}*/
 		
 		
-		/*$reports = new Reports();
+		$reports = new Reports();
 		
 		if($items_id)
-			$data['items_detail'] = $reports->get_direct_item_detail($start_date,$end_date,$items_id);*/
+			$data['items_detail'] = $reports->get_direct_item_detail($start_date,$end_date,$items_id);
 			
 		return response($data);
     }

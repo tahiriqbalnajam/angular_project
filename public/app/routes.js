@@ -106,6 +106,10 @@ app.config(['$routeProvider',
                 templateUrl: 'templates/sale_direct.html',
                 controller: 'SalesController'
             }).
+			when('/sale_combine', {
+                templateUrl: 'templates/sale_combine.html',
+                controller: 'SalesController'
+            }).
 			when('/users', {
                 templateUrl: 'templates/user.html',
                 controller: 'UserController'

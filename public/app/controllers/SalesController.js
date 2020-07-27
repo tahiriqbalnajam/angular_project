@@ -127,6 +127,32 @@ app.controller('SalesController', function(dataFactory,$scope,$http,site_url){
 		
     });
   }
+  /////////end direct sale
+  //////////// combile sale
+$scope.saveCombineSale = function(){
+	$scope.addItem.$invalid = true;
+    dataFactory.httpRequest('combine_sales','POST',{},{former:$scope.form,direct_product:$scope.choices1,stock_product:$scope.choices}).then(function(data) {
+		if(data.check_no_error){
+			$scope.addItem.$invalid = false;
+			alert(data.check_no_error);
+		}
+		else if(parseInt(data.id)){
+			$scope.all_items = data.all_items;
+			alert("Data inserted Successfully");
+	  		alert(data.res);
+			$scope.form = null;
+			$scope.choices1 = [{id: 1,saleitem:'',purchase_price:0,saler:0,sale_price:0,qty:0,total:0,bachat:0,purchaser:0,purchaser_total:0,saler_total:0,bachat_total:0}];
+			$scope.choices = [{id: 1,saleitem:'',price:0,qty:0,total:0,payment_type:'',intrest:0}];
+	 	}
+		
+    });
+}
+  
+  ////////////end combine sale
+  
+  
+  
+  
   $scope.saveReceiveItem = function(){
 	  $scope.receiveItem.$invalid = true;
     dataFactory.httpRequest('receive_saleitems','POST',{},$scope.form).then(function(data) {

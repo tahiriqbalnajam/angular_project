@@ -1123,4 +1123,317 @@ class SalesController extends Controller
 		return response($data);
 	
 	}
+	
+	
+	
+	////////combine sale
+	public function combine_sales(Request $request)
+	{
+		
+		$detail_message = '';
+    	$input = $request->all();		
+		$former = $request->input('former');
+		$former['former'];
+		$account = Account::find($former['former']);
+				if(isset($former['detail']))
+					$detail = $former['detail'];
+				else $detail = '';
+				if(isset($former['check_no']))
+					$check_no = $former['check_no'];
+				else $check_no = '';
+				$direct_product = $request->input('direct_product');
+				$g_seller_total = 0;
+					$g_former_total = 0;
+					foreach($direct_product as $pre){
+						$sale_item_detail = Item::find($pre['saleitem']);
+						$detail_message .= 'Item:'.$sale_item_detail->title.', Qty:'.$pre['qty'].', Rate:'.$pre['sale_price'];
+						$g_former_total = $g_former_total+$pre['purchaser_total'];
+					}
+					DB::beginTransaction();
+					try {
+					
+					$sale_id = DB::table('sales')->insertGetId(
+						array('account_id' => $former['former'],
+						'amount' => $g_former_total,
+						'detail' => $detail,
+						'check_no' => $check_no,
+						'date' => Session::get('todayDate'),
+						'deleted' => 'no',
+						'running_sale' => 'yes',
+						'rabih_kharif' => $former['rabih_kharif'],
+						));
+						$grand_jama = 0;
+					foreach($direct_product as $pre){
+						$g_seller_total = $g_seller_total+$pre['saler_total'];
+						DB::table('running_sale_items')->insert(array(
+						'quantity' => $pre['qty'],
+						'item_id' => $pre['saleitem'],
+						'price' => $pre['purchase_price'],
+						'sale_price' => $pre['purchaser_total'],
+						'purchase_price' => $pre['saler_total'],
+						'purchaser_id' => $former['former'],
+						'seller_id' => $pre['seller'],
+						'sale_id' => $sale_id,
+						'saler_percentage' => $pre['saler'],
+						'purchaser_percentage' => $pre['purchaser'],
+						'deleted' => 'no',
+						'date' => Session::get('todayDate'),
+						));
+						
+						DB::table('transection')->insert(array(
+						'account_id' => $pre['seller'],
+						'amount' => $pre['saler_total'],
+						'type' => 'direct_sale',
+						'detail' => 'Amount From Direct Sale',
+						'payment_type' => 'jama',			
+						'date' => Session::get('todayDate'),
+						'sale_purchase_id' => $sale_id,
+						));
+						
+					}
+					DB::table('transection')->insert(array(
+						'account_id' => $former['former'],
+						'amount' => $g_former_total,
+						'type' => 'direct_sale',
+						'detail' => 'Amount From Direct Sale',
+						'payment_type' => 'naam',			
+						'date' => Session::get('todayDate'),
+						'sale_purchase_id' => $sale_id,
+						));
+					
+					DB::table('transection')->insert(
+						array('account_id' => 6,
+						'amount' => $g_former_total - $g_seller_total,
+						'type' => 'direct_sale',
+						'detail' => 'Amount From Direct Sale',
+						'payment_type' => 'jama',			
+						'date' => Session::get('todayDate'),
+						'sale_purchase_id' => $sale_id,
+						));
+						/*DB::commit();
+						} catch (\Exception $e) {
+						DB::rollback();*/
+						// something went wrong
+					//}
+				
+				//sms
+				$config = DB::table('config')->first();
+				$account = Account::find($former['former']);
+				if($account->sms == 'yes'){
+					$username =$config->sms_id;
+					$password =$config->sms_pass;
+					$sender = "Faizan Corp" ;
+					$mobile = $account->phone;
+					
+					$message = str_replace('{name}',$account->name,$config->sale_sms);
+					$message = str_replace('{amount}',$seller_total,$message);
+					$message = str_replace('{detail}',$detail_message,$message);
+					
+					$part = "http://sendpk.com/";
+						$url = "http://sendpk.com/api/sms.php?username=".$username."&password=".$password."&mobile=".$mobile."&sender=".urlencode($sender)."&message=".urlencode($message);						
+						$ch = curl_init();
+						$timeout = 300;
+						curl_setopt($ch,CURLOPT_URL,$url);
+						
+						curl_setopt($ch, CURLOPT_HEADER, 0);
+						curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+						curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
+						$responce = curl_exec($ch);
+						curl_close($ch); 
+				}
+				/*if(isset($responce)){
+					if(strpos($responce,'OK') === 0)
+						$response = 'Message Sent';
+					else{
+						$response = $responce;
+						}
+						$all_items = Sale_items::get();
+						return response(array('id'=>$sale_id,'all_items'=>$all_items,'detail'=>$detail_message,'res'=>$response));
+					}
+					else{
+						$all_items = Sale_items::get();
+						return response(array('id'=>$sale_id,'all_items'=>$all_items,'detail'=>$detail_message,'res'=>'Messages are not active'));
+					}*/
+			//////////////////stock sale
+			
+			
+			
+			
+			
+			
+			
+				if(isset($former['detail']))
+					$detail = $former['detail'];
+				else $detail = '';
+				if(isset($former['check_no']))
+					$check_no = $former['check_no'];
+				else $check_no = '';
+				$stock_product = $request->input('stock_product');
+				//$data[];
+				//print_r($request->input('product'));
+				$stock_g_total = 0;
+				foreach($stock_product as $pre){
+					$percen = 0;
+					$sale_item_detail = Sale_items::find($pre['saleitem']);
+					$intrest = $pre['intrest'] ;
+						if($pre['payment_type'] == 'cash'){
+							$percen = 0;
+							$intr = 0;
+						}
+						else{
+							$percen =  ($pre['price']*$pre['qty'])*($pre['intrest']/100);
+							$intr = $pre['intrest'] ;
+						}
+						$detail_message .= 'Item:'.$sale_item_detail->name.', Qty:'.$pre['qty'].', Rate:'.$pre['price'];
+					$stock_total = $pre['price']*$pre['qty'];
+					$stock_total = $stock_total+$percen;
+					$stock_g_total = $stock_g_total+$stock_total;
+				}
+				$sale_id = DB::table('sales')->insertGetId(
+					['account_id' => $former['former'],
+					'amount' => $stock_g_total,
+					'detail' => $detail,
+					'check_no' => $check_no,
+					'date' => Session::get('todayDate'),
+					'deleted' => 'no',
+					]);
+					$stock_grand_jama = 0;
+					$stock_cash_total = 0;
+					$stock_tttlll = 0;
+				foreach($stock_product as $pre){
+					if($pre['payment_type'] == 'cash'){
+							$intr = 0;
+							$stock_cash_total = ($pre['price']*$pre['qty']);
+						}
+						else{
+							$intr = $pre['intrest'] ;
+							$stock_cash_total = 0;
+						}
+					$stock_tttlll += $stock_cash_total;
+					$item_id = $pre['saleitem'];				
+					$sale_item_ = Sale_items::find($pre['saleitem']);
+					$new_qty = $sale_item_['quantity'] - $pre['qty'];
+					$stock_total_jama = $pre['price'] * $pre['qty'];
+					//$total_jama = $sale_item_['price'] * $pre['qty'];
+					DB::table('sale_items')->where('id', $pre['saleitem'])->update(['quantity' => $new_qty]);
+					
+					DB::table('sales_items')->insert([
+					['quantity' => $pre['qty'],
+					'item_id' => $pre['saleitem'],
+					'price' => $pre['price'],
+					'purchase_price' => $sale_item_['price'],
+					'payment_type' => $pre['payment_type'],
+					'sale_id' => $sale_id,
+					'intrest' => $intr,
+					'deleted' => 'no',
+					]
+					]);
+					
+					DB::table('transection')->insert([
+					['account_id' => $sale_item_['category'],
+					'amount' => $stock_total_jama,
+					'type' => 'sale',
+					'detail' => 'Amount From Sale',
+					'payment_type' => 'jama',			
+					'date' => Session::get('todayDate'),
+					'sale_purchase_id' => $sale_id,
+					]
+					]);
+					$stock_grand_jama += $stock_total_jama; 
+					//$data[] = $pre['price'];
+				}
+				DB::table('transection')->insert([
+					['account_id' => $former['former'],
+					'amount' => $stock_g_total,
+					'type' => 'sale',
+					'detail' => 'Amount From Sale',
+					'payment_type' => 'naam',			
+					'date' => Session::get('todayDate'),
+					'sale_purchase_id' => $sale_id,
+					]
+					]);
+				if($stock_tttlll != 0){
+					DB::table('transection')->insert([
+						['account_id' => $former['former'],
+						'amount' => $stock_tttlll,
+						'type' => 'sale',
+						'detail' => 'Amount From Sale',
+						'payment_type' => 'jama',			
+						'date' => Session::get('todayDate'),
+						'sale_purchase_id' => $sale_id,
+						]
+						]);
+				}
+				DB::commit();
+						} catch (\Exception $e) {
+						DB::rollback();
+						}
+				// DB::table('transection')->insert([
+				// 	['account_id' => 6,
+				// 	'amount' => $g_total - $grand_jama,
+				// 	'type' => 'sale',
+				// 	'detail' => 'Amount From Sale',
+				// 	'payment_type' => 'jama',			
+				// 	'date' => Session::get('todayDate'),
+				// 	'sale_purchase_id' => $sale_id,
+				// 	]
+				// 	]);
+				
+				//sms
+				$config = DB::table('config')->first();
+				$account = Account::find($former['former']);
+				if($account->sms == 'yes'){
+					$username =$config->sms_id;
+					$password =$config->sms_pass;
+					$sender = "Faizan Corp" ;
+					$mobile = $account->phone;
+					
+					$message = str_replace('{name}',$account->name,$config->sale_sms);
+					$message = str_replace('{amount}',$g_total,$message);
+					$message = str_replace('{detail}',$detail_message,$message);
+					
+					$part = "http://sendpk.com/";
+
+						$url = "http://sendpk.com/api/sms.php?username=".$username."&password=".$password."&mobile=".$mobile."&sender=".urlencode($sender)."&message=".urlencode($message);
+						//$url = $part."api/sms.php?username=".$username."&password=".$password."&mobile=".$mobile."&sender=".urlencode($sender)."&message=".urlencode($message)." ";
+						//die();
+						$ch = curl_init();
+						$timeout = 300;
+						curl_setopt($ch,CURLOPT_URL,$url);
+						
+						curl_setopt($ch, CURLOPT_HEADER, 0);
+						curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+						curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
+						$responce = curl_exec($ch);
+						curl_close($ch); 
+				}
+				///Write out the response
+				//echo $response;
+				//end sms
+				/*if(strpos($responce,'OK') === 0)
+					$response = 'Message Sent';
+				else{
+					$response = $responce;
+					}
+					$all_items = Sale_items::get();
+				return response(array('id'=>$sale_id,'all_items'=>$all_items,'detail'=>$detail_message,'res'=>$response));*/
+				if(isset($responce)){
+					if(strpos($responce,'OK') === 0)
+						$response = 'Message Sent';
+					else{
+						$response = $responce;
+						}
+						$all_items = Sale_items::get();
+						return response(array('id'=>$sale_id,'all_items'=>$all_items,'detail'=>$detail_message,'res'=>$response));
+					}
+					else{
+						$all_items = Sale_items::get();
+						return response(array('id'=>$sale_id,'all_items'=>$all_items,'detail'=>$detail_message,'res'=>'Messages are not active'));
+					}
+			
+			
+	}
+		
+	
+	///////////// end combine sale
 }

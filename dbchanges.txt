@@ -1,0 +1,1 @@
+ALTER TABLE `sales` CHANGE `running_sale` `running_sale` ENUM('no','yes','combine') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL; 
