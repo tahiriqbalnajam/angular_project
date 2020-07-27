@@ -25,6 +25,9 @@
                     <table class="table table-urdu">
                     	<th>آئٹم نام</th>
                         <th> تاریخ</th>
+                        <th> ایلسپائری تاریخ</th>
+                        <th> بَیج نمبر</th>
+                        <th> انوائس نمبر</th>
                         <th>قیمت</th>
                         <th>مقدار</th>
                         <th>ان لوڈنگ</th>
@@ -33,24 +36,28 @@
                       <tr ng-repeat="x in detaildata" ng-class="{black : x.type == 'purchase', red: x.type == 'return'}">
                         <td>{{ x.name }}</td>
                         <td>{{ x.date }}</td>
+                        <td>{{ x.exp_date }}</td>
+                        <td>{{ x.batch_no }}</td>
+                        <td>{{ x.invoice_no }}</td>
                         <td>{{ (x.price).toFixed(2) }}</td>
                         <td>{{ x.quantity }}</td>
                         <td>{{ x.off_loading }}</td>
                         <td>{{ ((x.quantity*x.price) + (x.quantity*x.off_loading)).toFixed(2) }}</td>
                         <td ng-if="x.date == todayDate">                            
-                                <span ng-if="x.deleted == 'yes'">
-                                    <button ng-click="correct(x,$index)" class="btn btn-sm btn-success btn-urdu">Correct</button>
-                                </span>
-                                <span ng-if="x.deleted == 'no'">
-                                    <button ng-click="remove_receive_item(x,$index)" class="btn btn-sm btn-danger btn-urdu">Delete</button>
-                                </span>
-                            </td>
-                            <td ng-if="value.date != todayDate">&nbsp;
+                            <span ng-if="x.deleted == 'yes'">
+                                <button ng-click="correct(x,$index)" class="btn btn-sm btn-success btn-urdu">Correct</button>
+                            </span>
+                            <span ng-if="x.deleted == 'no'">
+                                <button ng-click="remove_receive_item(x,$index)" class="btn btn-sm btn-danger btn-urdu">Delete</button>
+                            </span>
+                        </td>
+                        <td ng-if="value.date != todayDate">&nbsp;
                          </td>
                       </tr>
                       <tr>
-                      	<td colspan="5"><strong>ٹوٹل</strong></td>
+                      	<td colspan="8"><strong>ٹوٹل</strong></td>
                         <td><strong>{{(getTotal(detaildata)).toFixed(2)}}</strong></td>
+                        <td></td>
                       </tr>
                     </table>
                     </div>

@@ -123,6 +123,24 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> بَیج نمبر</label>
+                                <input type="text" ng-model="form.batch_no" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> انوائس نمبر</label>
+                                <input type="text" ng-model="form.invoice_no" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> ایکسپائری تاریخ</label>
+                                <input type="text" ng-model="form.exp_date" class="form-control date-picker" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
                                 <label class="control-label urdu-lable"> ان لوڈنگ</label>
                                 <input type="text" ng-model="form.off_loading" class="form-control" required>
                             </div>
@@ -233,6 +251,24 @@
                             <div class="form-group label-floating">
                                 <label class="control-label urdu-lable"> قیمت</label>
                                 <input type="text" ng-model="form.price" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> بَیج نمبر</label>
+                                <input type="text" ng-model="form.batch_no" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> انوائس نمبر</label>
+                                <input type="text" ng-model="form.invoice_no" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label urdu-lable"> ایکسپائری تاریخ</label>
+                                <input type="text" ng-model="form.exp_date" class="form-control date-picker" required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -425,7 +461,16 @@
     </div>
 </div>
 <script>
-	$(function () {			
+	$('.date-picker').datepicker( {
+	changeMonth: true,
+	changeYear: true,
+	showButtonPanel: true,
+	autoclose:true,
+	todayHighlight:true,		
+	format: 'dd/mm/yyyy',        
+    });
+
+$(function () {			
 		$(".select2").select2();
 	});
 	</script>

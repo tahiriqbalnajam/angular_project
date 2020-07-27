@@ -1,1 +1,1 @@
-ALTER TABLE `sales` CHANGE `running_sale` `running_sale` ENUM('no','yes','combine') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL; 
+ALTER TABLE `sale_items_received` ADD `batch_no` VARCHAR(100) NOT NULL AFTER `off_loading`, ADD `invoice_no` VARCHAR(100) NOT NULL AFTER `batch_no`, ADD `exp_date` DATE NOT NULL AFTER `invoice_no`; 

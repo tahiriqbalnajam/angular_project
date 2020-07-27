@@ -59,7 +59,7 @@ class SaleitemsController extends Controller
 			'name' => $request->input('name'),
 			'quantity' => $request->input('quantity'),
 			'price' => ($request->input('price')+$request->input('off_loading')),
-			'category' => $request->input('category')
+			'category' => $request->input('category'),
 			));
 		$data['all_items'] = Sale_items::get();
 		
@@ -68,6 +68,9 @@ class SaleitemsController extends Controller
 			'supplier_id' => $request->input('supplier'),
 			'off_loading' => $request->input('off_loading'),
 			'date' => Session::get('todayDate'),
+			'exp_date' => $this->date_change($request->input('exp_date')),
+			'invoice_no' => $request->input('invoice_no'),
+			'batch_no' => $request->input('batch_no'),
 			'item_id' => $create_id));
 			
 		DB::table('transection')->insert(array('amount' => $request->input('quantity')*$request->input('price'),
@@ -117,6 +120,9 @@ class SaleitemsController extends Controller
 				'supplier_id' => $request->input('supplier'),
 				'off_loading' => $request->input('off_loading'),
 				'date' => Session::get('todayDate'),
+				'exp_date' => $this->date_change($request->input('exp_date')),
+				'invoice_no' => $request->input('invoice_no'),
+				'batch_no' => $request->input('batch_no'),
 				'item_id' => $request->input('name')));
 				
 			DB::table('transection')->insert(array('amount' => $request->input('quantity')*$request->input('price'),
